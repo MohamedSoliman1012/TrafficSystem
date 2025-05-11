@@ -39,6 +39,11 @@ public class Car extends Vehicle {
         this.isLuxury = isLuxury;
     }
 
+    // Default constructor
+    public Car() {
+        super();
+    }
+
     // Getters and Setters
     public int getNumberOfDoors() {
         return numberOfDoors;
