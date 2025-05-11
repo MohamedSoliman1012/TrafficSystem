@@ -5,7 +5,7 @@ import com.AavengersTrafficControle.trafficsystem.model.*;
 public class Main {
     public static void main(String[] args) {
         // Create a new Vehicle object
-        Vehicle myVehicle = new Vehicle(1, "ABC-123", "Toyota Corolla", "Red", 2020);
+        Vehicle myVehicle = new Vehicle();
 
         // Print the vehicle info
         System.out.println("Vehicle created:");
