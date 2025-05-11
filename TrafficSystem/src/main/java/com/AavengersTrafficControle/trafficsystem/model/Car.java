@@ -8,6 +8,10 @@ package com.AavengersTrafficControle.trafficsystem.model;
  *
  * @author mohamedsoliman
  */
-public class Car extends vehicle {
+public class Car extends Vehicle {
+    
+    public Car(int id, String plateNumber, String model, String color, int year) {
+        super(id, plateNumber, model, color, year);
+    }
     
 }
