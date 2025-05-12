@@ -1,4 +1,4 @@
-package com.AavengersTrafficControle.trafficsystem.app;
+package com.AvengersTrafficControle.trafficsystem.app;
 
 import com.AavengersTrafficControle.trafficsystem.model.*;
 import dao.*;
@@ -10,7 +10,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         VehicleDAO vehicleDAO = new VehicleDAO();
         CarDAO carDAO = new CarDAO();
-        
+
         while (true) {
             System.out.println("\n=== Traffic System Menu ===");
             System.out.println("1. Search vehicle by ID");
@@ -24,7 +24,7 @@ public class Main {
             scanner.nextLine(); // Consume newline
             
             switch (choice) {
-                case 1:
+                case 1 -> {
                     System.out.print("Enter vehicle ID: ");
                     int id = scanner.nextInt();
                     Vehicle vehicle = vehicleDAO.findById(id);
@@ -34,9 +34,9 @@ public class Main {
                     } else {
                         System.out.println("Vehicle not found.");
                     }
-                    break;
+                }
                     
-                case 2:
+                case 2 -> {
                     System.out.print("Enter plate number: ");
                     String plateNumber = scanner.nextLine();
                     List<Vehicle> vehiclesByPlate = vehicleDAO.findByPlateNumber(plateNumber);
@@ -48,9 +48,9 @@ public class Main {
                     } else {
                         System.out.println("No vehicles found with that plate number.");
                     }
-                    break;
+                }
                     
-                case 3:
+                case 3 -> {
                     System.out.print("Enter vehicle type (Car/Motorcycle/Bus): ");
                     String type = scanner.nextLine();
                     List<Vehicle> vehiclesByType = vehicleDAO.findByType(type);
@@ -62,9 +62,9 @@ public class Main {
                     } else {
                         System.out.println("No vehicles found of that type.");
                     }
-                    break;
+                }
                     
-                case 4:
+                case 4 -> {
                     List<Car> cars = carDAO.findAllCars();
                     if (!cars.isEmpty()) {
                         System.out.println("\nAll cars:");
@@ -74,16 +74,18 @@ public class Main {
                     } else {
                         System.out.println("No cars found in the database.");
                     }
-                    break;
+                }
                     
-                case 5:
+                case 5 -> {
                     System.out.println("Exiting program...");
                     DatabaseConnection.closeConnection();
                     scanner.close();
                     return;
+                }
                     
-                default:
-                    System.out.println("Invalid choice. Please try again.");
+                default -> System.out.println("Invalid choice. Please try again.");
+            
+
             }
         }
     }
