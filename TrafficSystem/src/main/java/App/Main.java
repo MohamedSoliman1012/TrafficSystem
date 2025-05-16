@@ -2,11 +2,10 @@ package App;
 
 import com.AavengersTrafficControle.trafficsystem.model.*;
 import dao.*;
-import java.awt.Frame;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Date;
-import javax.swing.*;
+import App.GUI;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
@@ -14,17 +13,10 @@ public class Main {
     private static CarDAO carDAO = new CarDAO();
     private static PoliceDAO policeDAO = new PoliceDAO();
     private static Police currentUser = null;
-    
+
     public static void main(String[] args) {
-
-    JFrame frame; //creates a frame
-        frame = new JFrame();
-    frame.setTitle("Frame title goes here"); //sets title of frame
-
-    frame.setResizable(false); //prevent frame from being resized
-    frame.setSize(420,420); //sets the x-dimension, and y-dimension of frame
-    frame.setVisible(true); //make frame visible
-
+        new GUI();
+        
         while (true) {
             if (currentUser == null) {
                 if (!login()) {
