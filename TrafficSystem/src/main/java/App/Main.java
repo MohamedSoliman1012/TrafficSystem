@@ -5,17 +5,17 @@ import dao.*;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Date;
-import App.GUI;
+
 
 public class Main {
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
     private static VehicleDAO vehicleDAO = new VehicleDAO();
-    private static CarDAO carDAO = new CarDAO();
+    private static final CarDAO carDAO = new CarDAO();
     private static PoliceDAO policeDAO = new PoliceDAO();
     private static Police currentUser = null;
 
     public static void main(String[] args) {
-        new GUI();
+
         
         while (true) {
             if (currentUser == null) {
