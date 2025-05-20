@@ -50,6 +50,19 @@ public class GUIAPP extends javax.swing.JFrame {
         Connection connection = DatabaseConnection.getConnection();
         this.policeDAO = new PoliceDAO(connection);
         initComponents();
+        setBackgroundImage();
+    }
+
+    private void setBackgroundImage() {
+        try {
+            javax.swing.ImageIcon bgIcon = new javax.swing.ImageIcon(getClass().getResource("/background.png"));
+            backgroundLabel = new javax.swing.JLabel(bgIcon);
+            backgroundLabel.setBounds(0, 0, bgIcon.getIconWidth(), bgIcon.getIconHeight());
+            TrafficSystem.add(backgroundLabel, new Integer(Integer.MIN_VALUE)); // Add as bottom layer
+            TrafficSystem.setLayer(backgroundLabel, Integer.MIN_VALUE);
+        } catch (Exception e) {
+            System.err.println("Background image not found: " + e.getMessage());
+        }
     }
 
     public void setOnLoginSuccess(java.util.function.Consumer<Police> onLoginSuccess) {
