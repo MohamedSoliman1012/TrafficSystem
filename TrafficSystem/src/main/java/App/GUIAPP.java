@@ -49,8 +49,8 @@ public class GUIAPP extends javax.swing.JFrame {
     public GUIAPP() {
         Connection connection = DatabaseConnection.getConnection();
         this.policeDAO = new PoliceDAO(connection);
+        setBackgroundImage(); // Set background before initializing components
         initComponents();
-        setBackgroundImage();
     }
 
     private void setBackgroundImage() {
@@ -58,8 +58,16 @@ public class GUIAPP extends javax.swing.JFrame {
             javax.swing.ImageIcon bgIcon = new javax.swing.ImageIcon(getClass().getResource("/background.png"));
             backgroundLabel = new javax.swing.JLabel(bgIcon);
             backgroundLabel.setBounds(0, 0, bgIcon.getIconWidth(), bgIcon.getIconHeight());
-            TrafficSystem.add(backgroundLabel, new Integer(Integer.MIN_VALUE)); // Add as bottom layer
+            // Create the layered pane if not already created
+            if (TrafficSystem == null) {
+                TrafficSystem = new javax.swing.JLayeredPane();
+            }
+            TrafficSystem.setPreferredSize(new java.awt.Dimension(bgIcon.getIconWidth(), bgIcon.getIconHeight()));
+            TrafficSystem.add(backgroundLabel, Integer.valueOf(Integer.MIN_VALUE));
             TrafficSystem.setLayer(backgroundLabel, Integer.MIN_VALUE);
+            // Set frame size to image size
+            setSize(bgIcon.getIconWidth(), bgIcon.getIconHeight());
+            setMinimumSize(new java.awt.Dimension(bgIcon.getIconWidth(), bgIcon.getIconHeight()));
         } catch (Exception e) {
             System.err.println("Background image not found: " + e.getMessage());
         }
