@@ -69,6 +69,10 @@ public class Person {
     public String getEmergencyPhone() { return emergencyPhone; }
     public void setEmergencyPhone(String emergencyPhone) { this.emergencyPhone = emergencyPhone; }
 
+    public String getName() {
+        return firstName + " " + lastName;
+    }
+
     @Override
     public String toString() {
         return "Person{" +

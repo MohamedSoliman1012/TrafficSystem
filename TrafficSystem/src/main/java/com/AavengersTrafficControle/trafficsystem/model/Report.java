@@ -18,6 +18,7 @@ public class Report {
     private String witnessStatement;
     private Date dueDate;
     private boolean isPaid;
+    private String reportType; // New field for report type
 
     public Report() {}
 
@@ -74,6 +75,8 @@ public class Report {
     public void setDueDate(Date dueDate) { this.dueDate = dueDate; }
     public boolean isPaid() { return isPaid; }
     public void setPaid(boolean paid) { isPaid = paid; }
+    public String getReportType() { return reportType; }
+    public void setReportType(String reportType) { this.reportType = reportType; }
 
     @Override
     public String toString() {
@@ -93,6 +96,7 @@ public class Report {
                 ", witnessStatement='" + witnessStatement + '\'' +
                 ", dueDate=" + dueDate +
                 ", isPaid=" + isPaid +
+                ", reportType='" + reportType + '\'' +
                 '}';
     }
-} 
+}

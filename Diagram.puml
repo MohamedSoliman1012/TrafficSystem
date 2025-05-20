@@ -1,0 +1,109 @@
+@startuml
+
+package "App" {
+  class GUIAPP {
+    - PoliceDAO policeDAO
+    - VehicleDAO vehicleDAO
+    - Consumer<Police> onLoginSuccess
+    + GUIAPP()
+    + setOnLoginSuccess(Consumer<Police>): void
+    + main(String[]): void
+    + searchVehicleByPlate(): void
+    + searchPersonByNationalId(): void
+    + createNewReport(): void
+    + viewMyReports(): void
+    + viewAllReports(): void
+    + payReportFees(): void
+    + showPayWindow(): void
+  }
+  class Main {
+    + main(String[]): void
+  }
+}
+
+package "dao" {
+  class PoliceDAO {
+    + payReportFees(int): boolean
+    + getUnpaidReportIds(): List<Integer>
+    + getReportsByPersonId(int): List<Report>
+    + getAllReports(): List<Report>
+  }
+  class VehicleDAO {
+    + findByPlateNumber(String): List<Vehicle>
+    + getVehicleById(int): Vehicle
+  }
+  class DatabaseConnection {
+    + getConnection(): Connection
+  }
+}
+
+package "resources" {
+  file DataBase.sql
+}
+
+class Report {
+  - int reportId
+  - int policeId
+  - int driverId
+  - int vehicleId
+  - String violationType
+  - String status
+  - boolean isPaid
+  + isPaid(): boolean
+  + getReportId(): int
+  + getPoliceId(): int
+  + getDriverId(): int
+  + getVehicleId(): int
+  + getViolationType(): String
+  + getStatus(): String
+}
+
+class Vehicle {
+  - int vehicleId
+  - String plateNumber
+  - String type
+  - String make
+  - String model
+  - int year
+  + getVehicleId(): int
+  + getPlateNumber(): String
+  + getType(): String
+  + getMake(): String
+  + getModel(): String
+  + getYear(): int
+}
+
+class Police {
+  - int personId
+  - String rank
+  - String department
+  + getPersonId(): int
+  + getRank(): String
+  + getDepartment(): String
+}
+
+class Driver {
+  - int personId
+  - String licenseNumber
+  + getPersonId(): int
+  + getLicenseNumber(): String
+}
+
+class Person {
+  - int personId
+  - String firstName
+  - String lastName
+  - String nationalId
+  + getPersonId(): int
+  + getFirstName(): String
+  + getLastName(): String
+  + getNationalId(): String
+}
+
+Person <|-- Police
+Person <|-- Driver
+Vehicle <|-- Report
+Police <|-- Report
+Driver <|-- Report
+
+@enduml

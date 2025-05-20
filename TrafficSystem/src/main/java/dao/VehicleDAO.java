@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  *
- * @author mohamedsoliman
+ * @author 
  */
 public class VehicleDAO {
     protected Connection connection;
@@ -48,6 +48,7 @@ public class VehicleDAO {
         } catch (SQLException e) {
             System.out.println("Error finding vehicles: " + e.getMessage());
         }
+        // Ensure the connection remains open even if no vehicles are found
         return vehicles;
     }
     

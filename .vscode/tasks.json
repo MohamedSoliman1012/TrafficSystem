@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run GUIAPP",
+			"type": "shell",
+			"command": "mvn compile exec:java -Dexec.mainClass=App.GUIAPP",
+			"problemMatcher": [
+				"$javac"
+			]
+		}
+	]
+}

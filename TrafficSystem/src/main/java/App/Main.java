@@ -1,61 +1,33 @@
 package App;
 
-import com.AavengersTrafficControle.trafficsystem.model.*;
-import dao.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Date;
 
+import com.AavengersTrafficControle.trafficsystem.model.Person;
+import com.AavengersTrafficControle.trafficsystem.model.Police;
+import com.AavengersTrafficControle.trafficsystem.model.Report;
+import com.AavengersTrafficControle.trafficsystem.model.Vehicle;
+
+import dao.DatabaseConnection;
+import dao.PoliceDAO;
+import dao.VehicleDAO;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
-    private static VehicleDAO vehicleDAO = new VehicleDAO();
-    private static final CarDAO carDAO = new CarDAO();
-    private static PoliceDAO policeDAO = new PoliceDAO();
+    private static final VehicleDAO vehicleDAO = new VehicleDAO();
+    private static final PoliceDAO policeDAO = new PoliceDAO(null);
     private static Police currentUser = null;
 
     public static void main(String[] args) {
-
-        
-        while (true) {
-            if (currentUser == null) {
-                if (!login()) {
-                    System.out.println("Login failed. Exiting program...");
-                    DatabaseConnection.closeConnection();
-                    return;
-                }
-            }
-            
-            showMainMenu();
-        }
-    }
-
-    private static boolean login() {
-        int maxAttempts = 5;
-        int attempts = 0;
-        
-        while (attempts < maxAttempts) {
-            System.out.println("\n=== Police Login ===");
-            System.out.print("Username: ");
-            String username = scanner.nextLine();
-            System.out.print("Password: ");
-            String password = scanner.nextLine();
-
-            currentUser = policeDAO.authenticate(username, password);
-            if (currentUser != null) {
-                System.out.println("Welcome, " + currentUser.getFirstName() + " " + currentUser.getLastName());
-                System.out.println("Rank: " + currentUser.getRank() + " (Level " + currentUser.getRankLevel() + ")");
-                return true;
-            }
-            
-            attempts++;
-            if (attempts < maxAttempts) {
-                System.out.println("Invalid username or password. You have " + (maxAttempts - attempts) + " attempts remaining.");
-            } else {
-                System.out.println("Maximum login attempts reached. Please try again later.");
-            }
-        }
-        return false;
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            GUIAPP loginApp = new GUIAPP();
+            loginApp.setOnLoginSuccess(user -> {
+                currentUser = user;
+                showMainMenu();
+            });
+            loginApp.setVisible(true);
+        });
     }
 
     private static void showMainMenu() {
@@ -322,4 +294,4 @@ public class Main {
             System.out.println("No reports found.");
         }
     }
-} 
+}

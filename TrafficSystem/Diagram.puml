@@ -1,0 +1,39 @@
+@startuml
+annotation java.lang.Override
+class com.AavengersTrafficControle.trafficsystem.model.Bus
+class com.AavengersTrafficControle.trafficsystem.model.Car
+class com.AavengersTrafficControle.trafficsystem.model.Driver
+class com.AavengersTrafficControle.trafficsystem.model.Motorcycle
+class com.AavengersTrafficControle.trafficsystem.model.Officer
+class com.AavengersTrafficControle.trafficsystem.model.Person
+class com.AavengersTrafficControle.trafficsystem.model.Police
+class com.AavengersTrafficControle.trafficsystem.model.Report
+class com.AavengersTrafficControle.trafficsystem.model.Reports
+class com.AavengersTrafficControle.trafficsystem.model.Truck
+class com.AavengersTrafficControle.trafficsystem.model.Vehicle
+class java.util.Date
+com.AavengersTrafficControle.trafficsystem.model.Bus ..> java.lang.Override
+com.AavengersTrafficControle.trafficsystem.model.Bus --|> com.AavengersTrafficControle.trafficsystem.model.Vehicle
+com.AavengersTrafficControle.trafficsystem.model.Bus ..> java.util.Date
+com.AavengersTrafficControle.trafficsystem.model.Car ..> java.lang.Override
+com.AavengersTrafficControle.trafficsystem.model.Car --|> com.AavengersTrafficControle.trafficsystem.model.Vehicle
+com.AavengersTrafficControle.trafficsystem.model.Car ..> java.util.Date
+com.AavengersTrafficControle.trafficsystem.model.Driver ..> java.lang.Override
+com.AavengersTrafficControle.trafficsystem.model.Driver --|> com.AavengersTrafficControle.trafficsystem.model.Person
+com.AavengersTrafficControle.trafficsystem.model.Driver ..> java.util.Date
+com.AavengersTrafficControle.trafficsystem.model.Motorcycle ..> java.lang.Override
+com.AavengersTrafficControle.trafficsystem.model.Motorcycle --|> com.AavengersTrafficControle.trafficsystem.model.Vehicle
+com.AavengersTrafficControle.trafficsystem.model.Officer --|> com.AavengersTrafficControle.trafficsystem.model.Person
+com.AavengersTrafficControle.trafficsystem.model.Person ..> java.lang.Override
+com.AavengersTrafficControle.trafficsystem.model.Person ..> java.util.Date
+com.AavengersTrafficControle.trafficsystem.model.Police ..> java.lang.Override
+com.AavengersTrafficControle.trafficsystem.model.Police --|> com.AavengersTrafficControle.trafficsystem.model.Person
+com.AavengersTrafficControle.trafficsystem.model.Police ..> java.util.Date
+com.AavengersTrafficControle.trafficsystem.model.Report ..> java.lang.Override
+com.AavengersTrafficControle.trafficsystem.model.Report ..> java.util.Date
+com.AavengersTrafficControle.trafficsystem.model.Truck ..> java.lang.Override
+com.AavengersTrafficControle.trafficsystem.model.Truck --|> com.AavengersTrafficControle.trafficsystem.model.Vehicle
+com.AavengersTrafficControle.trafficsystem.model.Truck ..> java.util.Date
+com.AavengersTrafficControle.trafficsystem.model.Vehicle ..> java.lang.Override
+com.AavengersTrafficControle.trafficsystem.model.Vehicle ..> java.util.Date
+@enduml

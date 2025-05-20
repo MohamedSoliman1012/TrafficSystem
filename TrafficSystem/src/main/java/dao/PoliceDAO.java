@@ -8,6 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PoliceDAO extends VehicleDAO {
+
+    private Connection connection;
+
+    public PoliceDAO(Connection connection) {
+        this.connection = connection;
+    }
     
     public Police authenticate(String username, String password) {
         String query = "SELECT p.*, po.* FROM persons p " +
@@ -15,7 +21,7 @@ public class PoliceDAO extends VehicleDAO {
                       "WHERE po.username = ? AND po.password = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, username);
-            stmt.setString(2, password); // In production, use proper password hashing
+            stmt.setString(2, password); 
             ResultSet rs = stmt.executeQuery();
             
             if (rs.next()) {
@@ -83,6 +89,7 @@ public class PoliceDAO extends VehicleDAO {
         } catch (SQLException e) {
             System.out.println("Error finding person: " + e.getMessage());
         }
+        // Ensure the connection remains open even if no person is found
         return null;
     }
 
@@ -101,9 +108,99 @@ public class PoliceDAO extends VehicleDAO {
         return reports;
     }
     
+    public String getOwnerNameById(int ownerId) {
+        String query = "SELECT first_name, last_name FROM persons WHERE person_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, ownerId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("first_name") + " " + rs.getString("last_name");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching owner name: " + e.getMessage());
+        }
+        return "Unknown";
+    }
+
+    public String getOwnerNationalIdById(int ownerId) {
+        String query = "SELECT national_id FROM persons WHERE person_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, ownerId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("national_id");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching owner national ID: " + e.getMessage());
+        }
+        return "Unknown";
+    }
+
+    public List<Report> getReportsByVehicleId(int vehicleId) {
+        List<Report> reports = new ArrayList<>();
+        String query = "SELECT * FROM reports WHERE vehicle_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, vehicleId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                reports.add(extractReportFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching reports by vehicle ID: " + e.getMessage());
+        }
+        return reports;
+    }
+    
+    public List<Report> getReportsByPersonId(int personId) {
+        List<Report> reports = new ArrayList<>();
+        String query = "SELECT * FROM reports WHERE driver_id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, personId);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                reports.add(extractReportFromResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching reports by person ID: " + e.getMessage());
+        }
+        return reports;
+    }
+    
+    public boolean payReportFees(int reportId) {
+        String query = "UPDATE reports SET is_paid = TRUE, status = 'Paid' WHERE report_id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, reportId);
+            int rowsUpdated = statement.executeUpdate();
+
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            System.out.println("Error updating payment status for Report ID: " + reportId + " - " + e.getMessage());
+        }
+        return false;
+    }
+    
+    public List<Integer> getUnpaidReportIds() {
+        List<Integer> unpaidReportIds = new ArrayList<>();
+        String query = "SELECT report_id FROM reports WHERE is_paid = FALSE";
+
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                unpaidReportIds.add(resultSet.getInt("report_id"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching unpaid report IDs: " + e.getMessage());
+        }
+        return unpaidReportIds;
+    }
+    
     private Police extractPoliceFromResultSet(ResultSet rs) throws SQLException {
         Police police = new Police();
-        // Set person properties
+      
         police.setPersonId(rs.getInt("person_id"));
         police.setFirstName(rs.getString("first_name"));
         police.setLastName(rs.getString("last_name"));
@@ -115,7 +212,7 @@ public class PoliceDAO extends VehicleDAO {
         police.setGender(rs.getString("gender"));
         police.setBloodType(rs.getString("blood_type"));
         
-        // Set police-specific properties
+
         police.setBadgeNumber(rs.getInt("badge_number"));
         police.setRank(rs.getString("rank"));
         police.setDepartment(rs.getString("department"));
@@ -164,4 +261,4 @@ public class PoliceDAO extends VehicleDAO {
         person.setEmergencyPhone(rs.getString("emergency_phone"));
         return person;
     }
-} 
+}
