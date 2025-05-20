@@ -1,0 +1,42 @@
+DROP TABLE IF EXISTS reports;
+DROP TABLE IF EXISTS drivers;
+DROP TABLE IF EXISTS police;
+DROP TABLE IF EXISTS cars;
+DROP TABLE IF EXISTS motorcycles;
+DROP TABLE IF EXISTS buses;
+DROP TABLE IF EXISTS vehicles;
+DROP TABLE IF EXISTS persons;
+CREATE TABLE vehicles (
+    vehicle_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    plate_number TEXT UNIQUE NOT NULL,
+    registration_number TEXT UNIQUE NOT NULL,
+    type TEXT NOT NULL,
+    make TEXT NOT NULL,
+    model TEXT NOT NULL,
+    year INTEGER NOT NULL,
+    color TEXT NOT NULL,
+    fuel_type TEXT NOT NULL,
+    engine_number TEXT UNIQUE NOT NULL,
+    chassis_number TEXT UNIQUE NOT NULL,
+    seats INTEGER NOT NULL,
+    vehicle_status TEXT NOT NULL,
+    registration_date TEXT NOT NULL,
+    expiry_date TEXT NOT NULL,
+    insurance_provider TEXT NOT NULL,
+    insurance_expiry TEXT NOT NULL,
+    owner_id INTEGER NOT NULL,
+    current_location TEXT,
+    notes TEXT
+);
+CREATE TABLE cars (
+    vehicle_id INTEGER PRIMARY KEY,
+    body_type TEXT NOT NULL,
+    number_of_doors INTEGER NOT NULL,
+    FOREIGN KEY (vehicle_id) REFERENCES vehicles(vehicle_id)
+);
+CREATE TABLE motorcycles (
+    vehicle_id INTEGER PRIMARY KEY,
+    engine_type TEXT NOT NULL,
+    has_sidecar INTEGER NOT NULL CHECK (has_sidecar IN (0, 1)),
+    FOREIGN KEY (vehicle_id) REFERENCES vehicles(vehicle_id)
+);

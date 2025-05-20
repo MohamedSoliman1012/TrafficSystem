@@ -260,7 +260,7 @@ INSERT INTO reports (
     (10, 6, 1, '2024-05-01 14:30:00', 'Speeding', '5th Ave, NY',
      'Driver was going 80 in a 50 zone', 150.00, 2, 'Open', 'Speed camera footage', 'Witness saw the vehicle speeding', '2024-06-01', false, 'Regular'),
     (11, 7, 2, '2024-04-20 10:00:00', 'Running red light', 'Sunset Blvd, LA',
-     'Driver failed to stop at red light', 200.00, 3, 'Paid', 'Traffic light footage', NULL, '2024-05-20', true, 'Regular'),
+     'Driver failed to stop at red light', 200.00, 3, 'Paid', 'Traffic light footage', NULL, '2024-05-20', false, 'Regular'),
     (10, 9, 4, '2024-05-10 11:15:00', 'Illegal street racing', 'Nasr City, Cairo',
      'Porsche was seen racing another car', 1000.00, 5, 'Pending', 'Drone video', 'Multiple bystanders reported noise', '2024-06-10', false, 'Criminal');
 

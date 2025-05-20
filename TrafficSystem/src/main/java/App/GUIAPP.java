@@ -21,6 +21,8 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 /**
  *
@@ -39,6 +41,7 @@ public class GUIAPP extends javax.swing.JFrame {
     private javax.swing.JButton viewMyReportsButton;
     private javax.swing.JButton viewAllReportsButton;
     private javax.swing.JButton logoutButton;
+    private javax.swing.JLabel backgroundLabel;
 
     /**
      * Creates new form GUIAPP
