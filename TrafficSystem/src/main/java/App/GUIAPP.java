@@ -101,8 +101,8 @@ public class GUIAPP extends javax.swing.JFrame {
         TrafficSystem.setOpaque(true);
 
         // Login panel styling
-        loginPanel.setOpaque(true);
-        loginPanel.setBackground(new java.awt.Color(255, 255, 255));
+        loginPanel.setOpaque(false); // Make panel transparent
+        // loginPanel.setBackground(new java.awt.Color(255, 255, 255)); // Remove background color
         loginPanel.setBorder(javax.swing.BorderFactory.createCompoundBorder(
             javax.swing.BorderFactory.createLineBorder(new java.awt.Color(220, 220, 220), 1, true),
             javax.swing.BorderFactory.createEmptyBorder(30, 30, 30, 30)
@@ -207,9 +207,10 @@ public class GUIAPP extends javax.swing.JFrame {
 
     private void initMainMenuPanel() {
         mainMenuPanel = new javax.swing.JPanel();
+        mainMenuPanel.setOpaque(false); // Make panel transparent
         mainMenuPanel.setLayout(new java.awt.GridLayout(7, 1, 15, 15));
         mainMenuPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        mainMenuPanel.setBackground(new java.awt.Color(240, 240, 240));
+        // mainMenuPanel.setBackground(new java.awt.Color(240, 240, 240)); // Remove background color
 
         searchVehicleButton = createStyledButton("Search Vehicle by Plate Number");
         searchPersonButton = createStyledButton("Search Person by National ID");
