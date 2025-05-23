@@ -114,6 +114,20 @@ public class PersonDAO {
         }
     }
 
+    public List<Person> getAllPersons() {
+        List<Person> people = new ArrayList<>();
+        String query = "SELECT * FROM persons";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                people.add(extractPersonFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching all persons: " + e.getMessage());
+        }
+        return people;
+    }
+
     private Person extractPersonFromResultSet(ResultSet rs) throws SQLException {
         return new Person(
             rs.getInt("person_id"),

@@ -1,0 +1,92 @@
+package App;
+
+import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamImageTransformer;
+import com.github.sarxos.webcam.WebcamPanel;
+import com.github.sarxos.webcam.WebcamResolution;
+import com.google.zxing.*;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
+public class QRCodeScanner {
+    public static void main(String[] args) {
+        Webcam webcam = Webcam.getDefault();
+        webcam.setViewSize(WebcamResolution.VGA.getSize());
+        webcam.open();
+
+        JFrame window = new JFrame("QR Code Scanner - License Plate");
+        WebcamPanel panel = new WebcamPanel(webcam);
+
+        window.add(panel);
+        window.pack();
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setVisible(true);
+
+        // Scan loop
+        while (true) {
+            BufferedImage image = webcam.getImage();
+            if (image != null) {
+                String result = decodeQRCode(image);
+                if (result != null) {
+                    System.out.println("License Plate QR Code Detected: " + result);
+                    JOptionPane.showMessageDialog(window, "License Plate: " + result);
+                    break; // Stop after first detection
+                }
+            }
+            try {
+                Thread.sleep(200); // Reduce CPU usage
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        webcam.close();
+        window.dispose();
+    }
+
+    // Helper to scan QR code using webcam and return result
+    public static String scanAndReturnResult() {
+        Webcam webcam = Webcam.getDefault();
+        webcam.setViewSize(WebcamResolution.VGA.getSize());
+        webcam.open();
+        JFrame window = new JFrame("QR Code Scanner");
+        WebcamPanel panel = new WebcamPanel(webcam);
+        panel.setFPSDisplayed(true);
+        window.add(panel);
+        window.pack();
+        window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        window.setVisible(true);
+        String resultText = null;
+        while (resultText == null) {
+            BufferedImage image = webcam.getImage();
+            if (image != null) {
+                resultText = decodeQRCode(image);
+                if (resultText != null) {
+                    JOptionPane.showMessageDialog(window, "QR Code Detected: " + resultText);
+                }
+            }
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        webcam.close();
+        window.dispose();
+        return resultText;
+    }
+
+    private static String decodeQRCode(BufferedImage image) {
+        LuminanceSource source = new BufferedImageLuminanceSource(image);
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        try {
+            Result result = new MultiFormatReader().decode(bitmap);
+            return result.getText();
+        } catch (NotFoundException e) {
+            return null; // No QR code found
+        }
+    }
+}

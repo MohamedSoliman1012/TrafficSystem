@@ -18,6 +18,33 @@
     </properties>
 
     <dependencies>
+        <!-- Webcam Capture -->
+<dependency>
+    <groupId>com.github.sarxos</groupId>
+    <artifactId>webcam-capture</artifactId>
+    <version>0.3.12</version>
+  </dependency>
+
+  <!-- Tess4J for OCR -->
+  <dependency>
+    <groupId>net.sourceforge.tess4j</groupId>
+    <artifactId>tess4j</artifactId>
+    <version>5.4.0</version>
+  </dependency>
+
+  <!-- ZXing for QR code scanning -->
+  <dependency>
+    <groupId>com.google.zxing</groupId>
+    <artifactId>core</artifactId>
+    <version>3.5.2</version>
+  </dependency>
+  <dependency>
+    <groupId>com.google.zxing</groupId>
+    <artifactId>javase</artifactId>
+    <version>3.5.2</version>
+  </dependency>
+
+        
         <!-- PostgreSQL JDBC driver -->
         <dependency>
             <groupId>org.postgresql</groupId>

@@ -68,6 +68,35 @@ public class VehicleDAO {
         return vehicles;
     }
     
+    public List<Vehicle> findByQRCode(String qrCode) {
+        List<Vehicle> vehicles = new ArrayList<>();
+        String query = "SELECT * FROM vehicles WHERE qr_code = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, qrCode);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                vehicles.add(extractVehicleFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error finding vehicles by QR code: " + e.getMessage());
+        }
+        return vehicles;
+    }
+    
+    public List<Vehicle> getAllVehicles() {
+        List<Vehicle> vehicles = new ArrayList<>();
+        String query = "SELECT * FROM vehicles";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                vehicles.add(extractVehicleFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching all vehicles: " + e.getMessage());
+        }
+        return vehicles;
+    }
+    
     protected Vehicle extractVehicleFromResultSet(ResultSet rs) throws SQLException {
         Vehicle vehicle = new Vehicle();
         vehicle.setVehicleId(rs.getInt("vehicle_id"));

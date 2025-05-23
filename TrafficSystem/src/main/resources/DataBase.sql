@@ -36,7 +36,8 @@ CREATE TABLE vehicles (
     insurance_expiry DATE NOT NULL,
     owner_id INTEGER NOT NULL,
     current_location VARCHAR(100),
-    notes TEXT
+    notes TEXT,
+    qr_code VARCHAR(255) UNIQUE
 );
 
 -- Car Table (Extends Vehicle)
@@ -97,7 +98,8 @@ CREATE TABLE persons (
     gender VARCHAR(10) NOT NULL,
     blood_type VARCHAR(5),
     emergency_contact VARCHAR(100),
-    emergency_phone VARCHAR(20)
+    emergency_phone VARCHAR(20),
+    qr_code VARCHAR(255) UNIQUE
 );
 
 -- Police Table (Extends Persons)
@@ -154,23 +156,23 @@ CREATE TABLE reports (
 -- Persons (Generic data for owners, drivers, and police)
 INSERT INTO persons (
     first_name, last_name, national_id, date_of_birth, address, phone_number,
-    email, gender, blood_type, emergency_contact, emergency_phone
+    email, gender, blood_type, emergency_contact, emergency_phone, qr_code
 ) VALUES
-    ('Ahmed', 'Saleh', 'ID101', '1980-01-15', '123 Police St, City', '555-0101', 'ahmed.saleh@police.com', 'Male', 'O+', NULL, NULL),
-    ('Peter', 'Parker', 'ID102', '1985-05-20', '456 Officer Ave, Town', '555-0102', 'peter.parker@police.com', 'Male', 'A+', NULL, NULL),
-    ('Tom', 'Stark', 'ID103', '1990-11-30', '789 Cop Rd, Village', '555-0103', 'tom.stark@police.com', 'Male', 'B+', NULL, NULL),
-    ('Tony', 'Stark', 'ID104', '1992-07-12', '321 Officer St, City', '555-0104', 'tony.stark@police.com', 'Male', 'AB+', NULL, NULL),
-    ('Jef', 'Stark', 'ID105', '1995-09-23', '654 Police Ave, Town', '555-0105', 'jef.stark@police.com', 'Male', 'O-', NULL, NULL),
-    ('John', 'Doe', 'ID001', '1985-04-12', '123 Main St, NY', '555-1234', 'john.doe@example.com', 'Male', 'A+', 'Jane Doe', '555-5678'),
-    ('Alice', 'Smith', 'ID002', '1990-06-22', '456 Elm St, LA', '555-2345', 'alice.smith@example.com', 'Female', 'B+', 'Bob Smith', '555-6789'),
-    ('Carlos', 'Rivera', 'ID003', '1975-03-30', '789 Pine St, CHI', '555-3456', 'carlos.r@example.com', 'Male', 'O+', 'Maria Rivera', '555-7890'),
-    ('Engy', 'Mohamed', 'ID004', '2003-09-21', 'Kafr Al Dawar, Egypt', '010-111-2222', 'ahmed.soliman@gmail.com', 'Male', 'AB-', 'Hassan Soliman', '010-333-4444'),
-    ('Emily', 'Blunt', 'NID005', '1992-02-15', 'Miami, FL', '555-4567', 'emily.blunt@example.com', 'Female', 'O-', 'Sarah Blunt', '555-8901'),
-    ('Tom', 'Hardy', 'ID006', '1988-11-07', 'San Francisco, CA', '555-5678', 'tom.hardy@example.com', 'Male', 'B-', 'Leo Hardy', '555-9012'),
-    ('Sophia', 'Williams', 'ID007', '1995-08-12', 'Boston, MA', '555-6789', 'sophia.williams@example.com', 'Female', 'A+', 'Emma Williams', '555-0123'),
-    ('Michael', 'Johnson', 'ID008', '1982-12-05', 'Houston, TX', '555-7890', 'michael.johnson@example.com', 'Male', 'O-', 'Linda Johnson', '555-1235'),
-    ('Linda', 'Brown', 'ID009', '1978-03-18', 'Seattle, WA', '555-8901', 'linda.brown@example.com', 'Female', 'B+', 'George Brown', '555-2346'),
-    ('David', 'Lee', 'ID010', '1987-10-25', 'Denver, CO', '555-9012', 'david.lee@example.com', 'Male', 'AB+', 'Nancy Lee', '555-3457');
+    ('Ahmed', 'Saleh', 'ID001', '1986-07-07', 'Damnhour, elbhaira', '555-0101', 'ahmed.saleh@police.com', 'Male', 'O+', NULL, NULL, NULL),
+    ('Peter', 'Parker', 'ID102', '1985-05-20', '456 Officer Ave, Town', '555-0102', 'peter.parker@police.com', 'Male', 'A+', NULL, NULL, NULL),
+    ('Tom', 'Stark', 'ID103', '1990-11-30', '789 Cop Rd, Village', '555-0103', 'tom.stark@police.com', 'Male', 'B+', NULL, NULL, NULL),
+    ('Tony', 'Stark', 'ID104', '1992-07-12', '321 Officer St, City', '555-0104', 'tony.stark@police.com', 'Male', 'AB+', NULL, NULL, NULL),
+    ('Jef', 'Stark', 'ID105', '1995-09-23', '654 Police Ave, Town', '555-0105', 'jef.stark@police.com', 'Male', 'O-', NULL, NULL, NULL),
+    ('John', 'Doe', 'ID101', '1985-04-12', '123 Main St, NY', '555-1234', 'john.doe@example.com', 'Male', 'A+', 'Jane Doe', '555-5678', NULL),
+    ('Alice', 'Smith', 'ID002', '1990-06-22', '456 Elm St, LA', '555-2345', 'alice.smith@example.com', 'Female', 'B+', 'Bob Smith', '555-6789', NULL),
+    ('Carlos', 'Rivera', 'ID003', '1975-03-30', '789 Pine St, CHI', '555-3456', 'carlos.r@example.com', 'Male', 'O+', 'Maria Rivera', '555-7890', NULL),
+    ('Emily', 'Blunt', 'NID005', '1992-02-15', 'Miami, FL', '555-4567', 'emily.blunt@example.com', 'Female', 'O-', 'Sarah Blunt', '555-8901', NULL),
+    ('Tom', 'Hardy', 'ID006', '1988-11-07', 'San Francisco, CA', '555-5678', 'tom.hardy@example.com', 'Male', 'B-', 'Leo Hardy', '555-9012', NULL),
+    ('Sophia', 'Williams', 'ID007', '1995-08-12', 'Boston, MA', '555-6789', 'sophia.williams@example.com', 'Female', 'A+', 'Emma Williams', '555-0123', NULL),
+    ('Michael', 'Johnson', 'ID008', '1982-12-05', 'Houston, TX', '555-7890', 'michael.johnson@example.com', 'Male', 'O-', 'Linda Johnson', '555-1235', NULL),
+    ('Linda', 'Brown', 'ID009', '1978-03-18', 'Seattle, WA', '555-8901', 'linda.brown@example.com', 'Female', 'B+', 'George Brown', '555-2346', NULL),
+    ('David', 'Lee', 'ID010', '1987-10-25', 'Denver, CO', '555-9012', 'david.lee@example.com', 'Male', 'AB+', 'Nancy Lee', '555-3457', NULL),
+    ('Mohamed', 'Soliman', 'ID219', '2006-09-21', 'Kafr Eldawar, Elbhaira', '+201093039462', 'mohamedsolaiman1012@gmail.com', 'Male', 'A+', NULL, NULL, 'ID219');
 
 -- Police
 INSERT INTO police (
@@ -210,20 +212,30 @@ INSERT INTO drivers (
 INSERT INTO vehicles (
     plate_number, registration_number, type, make, model, year, color, fuel_type,
     engine_number, chassis_number, seats, vehicle_status, registration_date, expiry_date,
-    insurance_provider, insurance_expiry, owner_id, current_location, notes
+    insurance_provider, insurance_expiry, owner_id, current_location, notes, qr_code
 ) VALUES
     ('ABC123', 'REG001', 'Car', 'Toyota', 'Camry', 2020, 'Silver', 'Petrol', 'ENG001', 'CHS001', 5, 'Active',
-     '2020-01-01', '2025-01-01', 'State Farm', '2024-12-31', 6, 'New York', 'Regular maintenance'),
+     '2020-01-01', '2025-01-01', 'State Farm', '2024-12-31', 6, 'New York', 'Regular maintenance', 'ABC123'),
     ('XYZ789', 'REG002', 'Motorcycle', 'Honda', 'CBR600', 2021, 'Red', 'Petrol', 'ENG002', 'CHS002', 2, 'Active',
-     '2021-03-15', '2026-03-15', 'Progressive', '2024-12-31', 7, 'Los Angeles', 'Track ready'),
+     '2021-03-15', '2026-03-15', 'Progressive', '2024-12-31', 7, 'Los Angeles', 'Track ready', 'XYZ789'),
     ('BUS456', 'REG003', 'Bus', 'Mercedes', 'Sprinter', 2019, 'White', 'Diesel', 'ENG003', 'CHS003', 20, 'Active',
-     '2019-06-01', '2024-06-01', 'Allstate', '2024-12-31', 8, 'Chicago', 'School bus'),
+     '2019-06-01', '2024-06-01', 'Allstate', '2024-12-31', 8, 'Chicago', 'School bus', 'BUS456'),
     ('POR123', 'REG006', 'Car', 'Porsche', 'GT3 RS', 2023, 'Blue', 'Petrol', 'ENG006', 'CHS006', 2, 'Active',
-     '2023-05-01', '2028-05-01', 'AXA', '2027-12-31', 9, 'Cairo', 'High-performance sports car'),
+     '2023-05-01', '2028-05-01', 'AXA', '2027-12-31', 9, 'Cairo', 'High-performance sports car', 'POR123'),
     ('DEF456', 'REG004', 'Car', 'BMW', 'M5', 2022, 'Black', 'Petrol', 'ENG004', 'CHS004', 5, 'Active',
-     '2022-02-01', '2027-02-01', 'Geico', '2024-12-31', 6, 'Miami', 'High performance'),
+     '2022-02-01', '2027-02-01', 'Geico', '2024-12-31', 6, 'Miami', 'High performance', 'DEF456'),
     ('MOTO789', 'REG005', 'Motorcycle', 'Ducati', 'Panigale', 2023, 'Yellow', 'Petrol', 'ENG005', 'CHS005', 2, 'Active',
-     '2023-01-10', '2028-01-10', 'Liberty Mutual', '2024-12-31', 7, 'San Francisco', 'Superbike');
+     '2023-01-10', '2028-01-10', 'Liberty Mutual', '2024-12-31', 7, 'San Francisco', 'Superbike', 'MOTO789'),
+    ('CAR000', 'REG100', 'Car', 'Mercedes', 'G Class', 2025, 'Black', 'Petrol', 'ENG100', 'CHS100', 5, 'Active',
+     '2025-05-21', '2030-05-21', 'Allianz', '2030-05-20', 16, 'Alexandria', 'Luxury SUV', 'CAR000'),
+    ('BM1', 'REG200', 'Car', 'BMW', 'M3', 2022, 'Black', 'Petrol', 'ENG200', 'CHS200', 5, 'Active',
+     '2022-01-01', '2027-01-01', 'Geico', '2026-12-31', (SELECT person_id FROM persons WHERE national_id = 'ID219'), 'Kafr Eldawar', 'Mohamed Soliman''s BMW', 'BM1'),
+    ('POR1', 'REG201', 'Car', 'Porsche', '911', 2023, 'Red', 'Petrol', 'ENG201', 'CHS201', 2, 'Active',
+     '2023-03-01', '2028-03-01', 'AXA', '2027-12-31', (SELECT person_id FROM persons WHERE national_id = 'ID219'), 'Kafr Eldawar', 'Mohamed Soliman''s Porsche', 'POR1'),
+    ('TOT1', 'REG202', 'Car', 'Toyota', 'Supra', 2021, 'White', 'Petrol', 'ENG202', 'CHS202', 2, 'Active',
+     '2021-05-01', '2026-05-01', 'State Farm', '2025-12-31', (SELECT person_id FROM persons WHERE national_id = 'ID219'), 'Kafr Eldawar', 'Mohamed Soliman''s Toyota Supra', 'TOT1'),
+    ('BEST1', 'REG999', 'Car', 'Rolls-Royce', 'Boat Tail', 2025, 'Blue', 'Petrol', 'ENG999', 'CHS999', 4, 'Active',
+     '2025-05-23', '2030-05-23', 'Rolls-Royce Insurance', '2030-05-22', (SELECT person_id FROM persons WHERE first_name = 'Ahmed' AND last_name = 'Saleh'), 'London', 'The most expensive car in the world', 'BEST1');
 
 -- Cars
 INSERT INTO cars (
@@ -232,7 +244,8 @@ INSERT INTO cars (
 ) VALUES
     (1, 4, 'Sedan', 'Automatic', 'FWD', 450, true, 'Toyota Entune', 8, false),
     (4, 2, 'Coupe', 'Automatic', 'RWD', 310, true, 'Porsche PCM', 6, true),
-    (5, 4, 'Sedan', 'Automatic', 'AWD', 530, true, 'iDrive 8', 10, true);
+    (5, 4, 'Sedan', 'Automatic', 'AWD', 530, true, 'iDrive 8', 10, true),
+    (7, 5, 'SUV', 'Automatic', 'AWD', 640, true, 'MBUX', 10, true);
 
 -- Motorcycles
 INSERT INTO motorcycles (
@@ -263,6 +276,12 @@ INSERT INTO reports (
      'Driver failed to stop at red light', 200.00, 3, 'Paid', 'Traffic light footage', NULL, '2024-05-20', false, 'Regular'),
     (10, 9, 4, '2024-05-10 11:15:00', 'Illegal street racing', 'Nasr City, Cairo',
      'Porsche was seen racing another car', 1000.00, 5, 'Pending', 'Drone video', 'Multiple bystanders reported noise', '2024-06-10', false, 'Criminal');
+
+-- For persons: set qr_code = national_id if not already set
+UPDATE persons SET qr_code = national_id WHERE qr_code IS NULL OR qr_code = '';
+
+-- For vehicles: set qr_code = plate_number if not already set
+UPDATE vehicles SET qr_code = plate_number WHERE qr_code IS NULL OR qr_code = '';
 
 -- =============================
 -- DONE ✅ Your system is ready!

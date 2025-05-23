@@ -93,6 +93,20 @@ public class PoliceDAO extends VehicleDAO {
         return null;
     }
 
+    public Person findPersonByQRCode(String qrCode) {
+        String query = "SELECT * FROM persons WHERE qr_code = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, qrCode);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return extractPersonFromResultSet(rs);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error finding person by QR code: " + e.getMessage());
+        }
+        return null;
+    }
+
     public List<Report> getAllReports() {
         List<Report> reports = new ArrayList<>();
         String query = "SELECT * FROM reports";
@@ -196,6 +210,41 @@ public class PoliceDAO extends VehicleDAO {
             System.out.println("Error fetching unpaid report IDs: " + e.getMessage());
         }
         return unpaidReportIds;
+    }
+    
+    /**
+     * Retrieves a Report by its ID.
+     * @param reportId the report ID
+     * @return the Report object if found, otherwise null
+     */
+    public Report getReportById(Integer reportId) {
+        Report report = null;
+        String sql = "SELECT * FROM reports WHERE report_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, reportId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    report = new Report();
+                    report.setReportId(rs.getInt("report_id"));
+                    report.setPoliceId(rs.getInt("police_id"));
+                    report.setDriverId(rs.getInt("driver_id"));
+                    report.setVehicleId(rs.getInt("vehicle_id"));
+                    report.setViolationType(rs.getString("violation_type"));
+                    report.setLocation(rs.getString("location"));
+                    report.setDescription(rs.getString("description"));
+                    report.setFine(rs.getDouble("fine"));
+                    report.setPointsDeducted(rs.getInt("points_deducted"));
+                    report.setReportDate(rs.getTimestamp("report_date"));
+                    report.setStatus(rs.getString("status"));
+                    report.setPaid(rs.getBoolean("paid"));
+                    report.setReportType(rs.getString("report_type"));
+                    report.setDueDate(rs.getTimestamp("due_date"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return report;
     }
     
     private Police extractPoliceFromResultSet(ResultSet rs) throws SQLException {

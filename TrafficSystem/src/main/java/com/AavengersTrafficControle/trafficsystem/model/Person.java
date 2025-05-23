@@ -23,6 +23,7 @@ public class Person {
     private String bloodType;
     private String emergencyContact;
     private String emergencyPhone;
+    private String qrCode;
 
     public Person() {}
 
@@ -68,6 +69,8 @@ public class Person {
     public void setEmergencyContact(String emergencyContact) { this.emergencyContact = emergencyContact; }
     public String getEmergencyPhone() { return emergencyPhone; }
     public void setEmergencyPhone(String emergencyPhone) { this.emergencyPhone = emergencyPhone; }
+    public String getQrCode() { return qrCode; }
+    public void setQrCode(String qrCode) { this.qrCode = qrCode; }
 
     public String getName() {
         return firstName + " " + lastName;
@@ -88,6 +91,7 @@ public class Person {
                 ", bloodType='" + bloodType + '\'' +
                 ", emergencyContact='" + emergencyContact + '\'' +
                 ", emergencyPhone='" + emergencyPhone + '\'' +
+                ", qrCode='" + qrCode + '\'' +
                 '}';
     }
 }

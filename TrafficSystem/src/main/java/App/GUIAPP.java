@@ -7,6 +7,7 @@ package App;
 import dao.PoliceDAO;
 import dao.VehicleDAO;
 import dao.DatabaseConnection;
+import dao.PersonDAO;
 import com.AavengersTrafficControle.trafficsystem.model.Police;
 import com.AavengersTrafficControle.trafficsystem.model.Person;
 import com.AavengersTrafficControle.trafficsystem.model.Vehicle;
@@ -21,17 +22,21 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Graphics;
+import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 /**
  *
- * @author moham
+ * @author 
  */
 public class GUIAPP extends javax.swing.JFrame {
 
     private final PoliceDAO policeDAO;
     private final VehicleDAO vehicleDAO = new VehicleDAO();
+    private final PersonDAO personDAO = new PersonDAO();
     private java.util.function.Consumer<Police> onLoginSuccess;
 
     private javax.swing.JPanel mainMenuPanel;
@@ -41,7 +46,36 @@ public class GUIAPP extends javax.swing.JFrame {
     private javax.swing.JButton viewMyReportsButton;
     private javax.swing.JButton viewAllReportsButton;
     private javax.swing.JButton logoutButton;
+    private javax.swing.JButton searchVehicleByQRCodeButton;
+    private javax.swing.JButton searchPersonByQRCodeButton;
+    private javax.swing.JButton displayQRCodesButton;
     private javax.swing.JLabel backgroundLabel;
+    ImageIcon AddS = new ImageIcon("background.jpg"); 
+    final Image Adds = AddS.getImage();
+    
+    /**
+     * Custom JPanel that paints the background image.
+     */
+    private class BackgroundPanel extends javax.swing.JPanel {
+        private Image bgImage;
+        public BackgroundPanel(Image img) {
+            this.bgImage = img;
+            setLayout(new java.awt.GridBagLayout()); // Use a layout manager for child panels
+
+        }
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (bgImage != null) {
+                g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), this);
+            } else {
+                g.setColor(Color.PINK);
+                g.fillRect(0, 0, getWidth(), getHeight());
+                g.setColor(Color.BLACK);
+                g.drawString("Background image not loaded", 20, 20);
+            }
+        }
+    }
 
     /**
      * Creates new form GUIAPP
@@ -49,28 +83,29 @@ public class GUIAPP extends javax.swing.JFrame {
     public GUIAPP() {
         Connection connection = DatabaseConnection.getConnection();
         this.policeDAO = new PoliceDAO(connection);
-        setBackgroundImage(); // Set background before initializing components
-        initComponents();
-    }
-
-    private void setBackgroundImage() {
+        Image bgImg = null;
         try {
-            javax.swing.ImageIcon bgIcon = new javax.swing.ImageIcon(getClass().getResource("/background.png"));
-            backgroundLabel = new javax.swing.JLabel(bgIcon);
-            backgroundLabel.setBounds(0, 0, bgIcon.getIconWidth(), bgIcon.getIconHeight());
-            // Create the layered pane if not already created
-            if (TrafficSystem == null) {
-                TrafficSystem = new javax.swing.JLayeredPane();
+            java.net.URL imgUrl = getClass().getResource("/background.png");
+            if (imgUrl != null) {
+                bgImg = new javax.swing.ImageIcon(imgUrl).getImage();
+                System.out.println("Loaded background.png from resources.");
+            } else {
+                System.err.println("background.png not found in resources. Trying absolute path...");
+                // Try absolute path as fallback (adjust path as needed)
+                java.io.File absFile = new java.io.File("c:/Users/moham/Documents/GitHub/TrafficSystem/TrafficSystem/src/main/resources/background.png");
+                if (absFile.exists()) {
+                    bgImg = new javax.swing.ImageIcon(absFile.getAbsolutePath()).getImage();
+                    System.out.println("Loaded background.png from absolute path: " + absFile.getAbsolutePath());
+                } else {
+                    System.err.println("background.png not found at absolute path either.");
+                }
             }
-            TrafficSystem.setPreferredSize(new java.awt.Dimension(bgIcon.getIconWidth(), bgIcon.getIconHeight()));
-            TrafficSystem.add(backgroundLabel, Integer.valueOf(Integer.MIN_VALUE));
-            TrafficSystem.setLayer(backgroundLabel, Integer.MIN_VALUE);
-            // Set frame size to image size
-            setSize(bgIcon.getIconWidth(), bgIcon.getIconHeight());
-            setMinimumSize(new java.awt.Dimension(bgIcon.getIconWidth(), bgIcon.getIconHeight()));
         } catch (Exception e) {
-            System.err.println("Background image not found: " + e.getMessage());
+            System.err.println("Error loading background image: " + e.getMessage());
         }
+        BackgroundPanel bgPanel = new BackgroundPanel(bgImg);
+        setContentPane(bgPanel);
+        initComponents();
     }
 
     public void setOnLoginSuccess(java.util.function.Consumer<Police> onLoginSuccess) {
@@ -97,14 +132,12 @@ public class GUIAPP extends javax.swing.JFrame {
         setTitle("Traffic System Login");
 
         // Main panel styling
-        TrafficSystem.setBackground(new java.awt.Color(245, 245, 245));
-        TrafficSystem.setOpaque(true);
+        TrafficSystem.setOpaque(false); // Make the layered pane transparent
 
         // Login panel styling
         loginPanel.setOpaque(false); // Make panel transparent
-        // loginPanel.setBackground(new java.awt.Color(255, 255, 255)); // Remove background color
         loginPanel.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-            javax.swing.BorderFactory.createLineBorder(new java.awt.Color(220, 220, 220), 1, true),
+            javax.swing.BorderFactory.createLineBorder(new java.awt.Color(220, 220, 220), 1),
             javax.swing.BorderFactory.createEmptyBorder(30, 30, 30, 30)
         ));
         java.awt.GridBagLayout gbl = new java.awt.GridBagLayout();
@@ -133,7 +166,7 @@ public class GUIAPP extends javax.swing.JFrame {
         jTextField1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 16));
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField1.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-            javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200), 2, true),
+            javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200), 2),
             javax.swing.BorderFactory.createEmptyBorder(8, 12, 8, 12)
         ));
         jTextField1.setToolTipText("Username");
@@ -145,7 +178,7 @@ public class GUIAPP extends javax.swing.JFrame {
         jPasswordField1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 16));
         jPasswordField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jPasswordField1.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-            javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200), 2, true),
+            javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200), 2),
             javax.swing.BorderFactory.createEmptyBorder(8, 12, 8, 12)
         ));
         jPasswordField1.setToolTipText("Password");
@@ -179,8 +212,9 @@ public class GUIAPP extends javax.swing.JFrame {
         // Set the main frame layout
         getContentPane().setLayout(new java.awt.BorderLayout());
         getContentPane().add(TrafficSystem, java.awt.BorderLayout.CENTER);
-
-        pack();
+        setSize(5000, 5000); // Make window extremely large
+        setResizable(false); // Not resizable
+        // pack(); // REMOVE or comment out this line to prevent overriding setSize
         setMinimumSize(new java.awt.Dimension(400, 400));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
@@ -207,36 +241,72 @@ public class GUIAPP extends javax.swing.JFrame {
 
     private void initMainMenuPanel() {
         mainMenuPanel = new javax.swing.JPanel();
-        mainMenuPanel.setOpaque(false); // Make panel transparent
-        mainMenuPanel.setLayout(new java.awt.GridLayout(7, 1, 15, 15));
+        mainMenuPanel.setOpaque(false);
+        mainMenuPanel.setLayout(new java.awt.GridLayout(8, 1, 15, 15));
         mainMenuPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        // mainMenuPanel.setBackground(new java.awt.Color(240, 240, 240)); // Remove background color
 
+        // Create paired panel for vehicle search buttons
+        javax.swing.JPanel vehicleSearchPanel = new javax.swing.JPanel(new java.awt.GridLayout(1, 2, 8, 0));
+        vehicleSearchPanel.setOpaque(false);
         searchVehicleButton = createStyledButton("Search Vehicle by Plate Number");
+        searchVehicleByQRCodeButton = createStyledButton("Search Vehicle by QR Code");
+        java.awt.Color qrBtnColor = new java.awt.Color(76, 175, 80); // Green
+        searchVehicleByQRCodeButton.setBackground(qrBtnColor);
+        searchVehicleByQRCodeButton.setForeground(java.awt.Color.WHITE);
+        searchVehicleByQRCodeButton.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
+        searchVehicleByQRCodeButton.setFocusPainted(false);
+        searchVehicleByQRCodeButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(56, 142, 60), 2));
+        searchVehicleByQRCodeButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        searchVehicleByQRCodeButton.setPreferredSize(new java.awt.Dimension(350, 50));
+        searchVehicleButton.setPreferredSize(new java.awt.Dimension(350, 50));
+        searchVehicleButton.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
+        vehicleSearchPanel.add(searchVehicleButton);
+        vehicleSearchPanel.add(searchVehicleByQRCodeButton);
+        searchVehicleButton.addActionListener(evt -> searchVehicleByPlate());
+        searchVehicleByQRCodeButton.addActionListener(evt -> searchVehicleByQRCode());
+
+        // Create paired panel for person search buttons
+        javax.swing.JPanel personSearchPanel = new javax.swing.JPanel(new java.awt.GridLayout(1, 2, 8, 0));
+        personSearchPanel.setOpaque(false);
         searchPersonButton = createStyledButton("Search Person by National ID");
+        searchPersonByQRCodeButton = createStyledButton("Search Person by QR Code");
+        searchPersonByQRCodeButton.setBackground(qrBtnColor);
+        searchPersonByQRCodeButton.setForeground(java.awt.Color.WHITE);
+        searchPersonByQRCodeButton.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
+        searchPersonByQRCodeButton.setFocusPainted(false);
+        searchPersonByQRCodeButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(56, 142, 60), 2));
+        searchPersonByQRCodeButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        searchPersonByQRCodeButton.setPreferredSize(new java.awt.Dimension(350, 50));
+        searchPersonButton.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
+        searchPersonButton.setPreferredSize(new java.awt.Dimension(350, 50));
+        personSearchPanel.add(searchPersonButton);
+        personSearchPanel.add(searchPersonByQRCodeButton);
+        searchPersonButton.addActionListener(evt -> searchPersonByNationalId());
+        searchPersonByQRCodeButton.addActionListener(evt -> searchPersonByQRCode());
+
         createReportButton = createStyledButton("Create New Report");
         viewMyReportsButton = createStyledButton("View My Reports");
         viewAllReportsButton = createStyledButton("View All Reports");
         logoutButton = createStyledButton("Logout");
         javax.swing.JButton payReportFeesButton = createStyledButton("Pay Report Fees");
+        displayQRCodesButton = createStyledButton("Display QR Codes");
 
-        searchVehicleButton.addActionListener(evt -> searchVehicleByPlate());
-        searchPersonButton.addActionListener(evt -> searchPersonByNationalId());
-        createReportButton.addActionListener(evt -> createNewReport());
-        viewMyReportsButton.addActionListener(evt -> viewMyReports());
-        viewAllReportsButton.addActionListener(evt -> viewAllReports());
-        logoutButton.addActionListener(evt -> logout());
-        payReportFeesButton.addActionListener(evt -> showPayWindow());
-
-        mainMenuPanel.add(searchVehicleButton);
-        mainMenuPanel.add(searchPersonButton);
+        mainMenuPanel.add(vehicleSearchPanel);
+        mainMenuPanel.add(personSearchPanel);
         mainMenuPanel.add(createReportButton);
         mainMenuPanel.add(viewMyReportsButton);
         mainMenuPanel.add(viewAllReportsButton);
         mainMenuPanel.add(payReportFeesButton);
+        mainMenuPanel.add(displayQRCodesButton);
         mainMenuPanel.add(logoutButton);
 
-        getContentPane().add(mainMenuPanel, java.awt.BorderLayout.CENTER);
+        // Add missing action listeners for the other buttons
+        createReportButton.addActionListener(evt -> createNewReport());
+        viewMyReportsButton.addActionListener(evt -> viewMyReports());
+        viewAllReportsButton.addActionListener(evt -> viewAllReports());
+        logoutButton.addActionListener(evt -> logout());
+        payReportFeesButton.addActionListener(evt -> payReportFees());
+        displayQRCodesButton.addActionListener(evt -> displayAllQRCodes());
     }
 
     private javax.swing.JButton createStyledButton(String text) {
@@ -304,6 +374,41 @@ public class GUIAPP extends javax.swing.JFrame {
         }
     }
 
+    private void searchVehicleByQRCode() {
+        String qrCode = scanQRCode();
+        if (qrCode != null) {
+            List<Vehicle> vehicles = vehicleDAO.findByQRCode(qrCode);
+            if (!vehicles.isEmpty()) {
+                StringBuilder result = new StringBuilder("<html><body style='font-family:Segoe UI; font-size:14px;'>");
+                result.append("<h3>Vehicles Found:</h3><table border='1' style='border-collapse:collapse; width:100%;'>");
+                result.append("<tr><th>Plate Number</th><th>Owner Name</th><th>Owner National ID</th><th>Car Type</th><th>Color</th><th>Model</th><th>Year</th><th>Reports</th></tr>");
+                for (Vehicle v : vehicles) {
+                    String ownerName = policeDAO.getOwnerNameById(v.getOwnerId());
+                    String ownerNationalId = policeDAO.getOwnerNationalIdById(v.getOwnerId());
+                    List<Report> reports = policeDAO.getReportsByVehicleId(v.getVehicleId());
+                    String reportStatus = reports.isEmpty() ? "No Reports" : "Has Reports";
+                    String reportColor = reports.isEmpty() ? "green" : "red";
+                    result.append("<tr>")
+                          .append("<td>").append(v.getPlateNumber()).append("</td>")
+                          .append("<td>").append(ownerName).append("</td>")
+                          .append("<td>").append(ownerNationalId).append("</td>")
+                          .append("<td>").append(v.getType()).append("</td>")
+                          .append("<td>").append(v.getColor()).append("</td>")
+                          .append("<td>").append(v.getModel()).append("</td>")
+                          .append("<td>").append(v.getYear()).append("</td>")
+                          .append("<td style='color:").append(reportColor).append(";'>").append(reportStatus).append("</td>")
+                          .append("</tr>");
+                }
+                result.append("</table></body></html>");
+                javax.swing.JLabel resultLabel = new javax.swing.JLabel(result.toString());
+                resultLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+                javax.swing.JOptionPane.showMessageDialog(this, resultLabel, "Search Results", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                showStyledMessageDialog("No vehicles found with that QR code.", "Search Results", javax.swing.JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
     private void searchPersonByNationalId() {
         String nationalId = javax.swing.JOptionPane.showInputDialog(this, "Enter national ID:");
         if (nationalId != null) {
@@ -340,6 +445,48 @@ public class GUIAPP extends javax.swing.JFrame {
             } else {
                 showStyledMessageDialog("No person found with that national ID.", "Search Results", javax.swing.JOptionPane.WARNING_MESSAGE);
             }
+        }
+    }
+
+    private void searchPersonByQRCode() {
+        String qrCode = scanQRCode();
+        if (qrCode != null) {
+            Person person = policeDAO.findPersonByQRCode(qrCode);
+            if (person != null) {
+                List<Report> reports = policeDAO.getReportsByPersonId(person.getPersonId());
+                StringBuilder resultBuilder = new StringBuilder("<html><body style='font-family:Segoe UI; font-size:14px;'>");
+                resultBuilder.append("<h3>Person Details:</h3>")
+                             .append("<p>Name: ").append(person.getFirstName()).append(" ").append(person.getLastName()).append("</p>")
+                             .append("<p>National ID: ").append(person.getNationalId()).append("</p>")
+                             .append("<p>Address: ").append(person.getAddress()).append("</p>");
+                resultBuilder.append("<h3>Associated Reports:</h3>")
+                             .append("<table border='1' style='border-collapse:collapse; width:100%;'>")
+                             .append("<tr><th>Report ID</th><th>Violation Type</th><th>Status</th></tr>");
+                for (Report report : reports) {
+                    String reportColor = report.getStatus().equalsIgnoreCase("No Reports") ? "green" : "red";
+                    String paymentStatus = report.isPaid() ? "Paid" : "Pending";
+                    resultBuilder.append("<tr>")
+                                 .append("<td>").append(report.getReportId()).append("</td>")
+                                 .append("<td>").append(report.getViolationType()).append("</td>")
+                                 .append("<td style='color:").append(reportColor).append(";'>").append(report.getStatus()).append(" (" + paymentStatus + ")").append("</td>")
+                                 .append("</tr>");
+                }
+                resultBuilder.append("</table></body></html>");
+                javax.swing.JLabel resultLabel = new javax.swing.JLabel(resultBuilder.toString());
+                resultLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+                javax.swing.JOptionPane.showMessageDialog(this, resultLabel, "Search Results", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                showStyledMessageDialog("No person found with that QR code.", "Search Results", javax.swing.JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
+    private String scanQRCode() {
+        try {
+            return QRCodeScanner.scanAndReturnResult();
+        } catch (Exception e) {
+            showStyledMessageDialog("Error scanning QR code: " + e.getMessage(), "QR Code Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return null;
         }
     }
 
@@ -483,38 +630,14 @@ public class GUIAPP extends javax.swing.JFrame {
     }
 
     private void payReportFees() {
-        String reportIdInput = javax.swing.JOptionPane.showInputDialog(this, "Enter Report ID to pay fees:");
-        if (reportIdInput != null) {
-            try {
-                int reportId = Integer.parseInt(reportIdInput.trim());
-
-                int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
-                    "Are you sure you want to pay the fees for Report ID: " + reportId + "?",
-                    "Confirm Payment",
-                    javax.swing.JOptionPane.OK_CANCEL_OPTION);
-
-                if (confirm == javax.swing.JOptionPane.OK_OPTION) {
-                    boolean success = policeDAO.payReportFees(reportId);
-                    if (success) {
-                        showStyledMessageDialog("Payment successful for Report ID: " + reportId, "Payment Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        showStyledMessageDialog("Failed to process payment. Please check the Report ID.", "Payment Failed", javax.swing.JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            } catch (NumberFormatException e) {
-                showStyledMessageDialog("Invalid Report ID. Please enter a valid number.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-            }
+        // Fetch unpaid report IDs
+        List<Integer> unpaidReportIds = policeDAO.getUnpaidReportIds();
+        if (unpaidReportIds == null || unpaidReportIds.isEmpty()) {
+            showStyledMessageDialog("No unpaid reports found.", "Pay Report Fees", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
-    }
 
-    private void showPayWindow() {
-        JFrame frame = new JFrame("Pay Report Fees");
-        frame.setSize(500, 300);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setResizable(true);
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout(10, 10));
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         JLabel titleLabel = new JLabel("Pay Report Fees", JLabel.CENTER);
@@ -523,20 +646,22 @@ public class GUIAPP extends javax.swing.JFrame {
         panel.add(titleLabel, BorderLayout.NORTH);
 
         JPanel formPanel = new JPanel(new GridLayout(2, 2, 10, 10));
-
         JLabel selectLabel = new JLabel("Select Report ID:");
         selectLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 16));
         formPanel.add(selectLabel);
 
         JComboBox<Integer> reportDropdown = new JComboBox<>();
-        List<Integer> unpaidReportIds = policeDAO.getUnpaidReportIds(); // Fetch unpaid report IDs from the database
         for (Integer id : unpaidReportIds) {
             reportDropdown.addItem(id);
         }
         reportDropdown.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 16));
         formPanel.add(reportDropdown);
-
         panel.add(formPanel, BorderLayout.CENTER);
+
+        // Info panel to show report details
+        JPanel infoPanel = new JPanel(new GridLayout(0, 1, 5, 5));
+        infoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Report Details"));
+        panel.add(infoPanel, BorderLayout.SOUTH);
 
         JButton payButton = new JButton("Pay");
         payButton.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
@@ -544,25 +669,91 @@ public class GUIAPP extends javax.swing.JFrame {
         payButton.setForeground(java.awt.Color.WHITE);
         payButton.setFocusPainted(false);
         payButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        payButton.setEnabled(false);
+
+        // Update info panel when a report is selected
+        reportDropdown.addActionListener(e -> {
+            infoPanel.removeAll();
+            Integer selectedId = (Integer) reportDropdown.getSelectedItem();
+            if (selectedId != null) {
+                Report report = policeDAO.getReportById(selectedId);
+                if (report != null) {
+                    infoPanel.add(new JLabel("Violation Type: " + report.getViolationType()));
+                    infoPanel.add(new JLabel("Fine: " + report.getFine()));
+                    infoPanel.add(new JLabel("Status: " + report.getStatus()));
+                    infoPanel.add(new JLabel("Points Deducted: " + report.getPointsDeducted()));
+                    infoPanel.add(new JLabel("Report Date: " + report.getReportDate()));
+                    payButton.setEnabled(true);
+                } else {
+                    infoPanel.add(new JLabel("Report details not found."));
+                    payButton.setEnabled(false);
+                }
+            } else {
+                payButton.setEnabled(false);
+            }
+            infoPanel.revalidate();
+            infoPanel.repaint();
+        });
+
+        // Trigger initial info display
+        if (reportDropdown.getItemCount() > 0) {
+            reportDropdown.setSelectedIndex(0);
+        }
+
         payButton.addActionListener(e -> {
             Integer selectedReportId = (Integer) reportDropdown.getSelectedItem();
             if (selectedReportId != null) {
                 boolean success = policeDAO.payReportFees(selectedReportId);
                 if (success) {
-                    JOptionPane.showMessageDialog(frame, "Payment successful for Report ID: " + selectedReportId, "Success", JOptionPane.INFORMATION_MESSAGE);
+                    showStyledMessageDialog("Payment successful for Report ID: " + selectedReportId, "Success", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Payment failed. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                    showStyledMessageDialog("Payment failed. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(payButton);
-        panel.add(buttonPanel, BorderLayout.SOUTH);
+        panel.add(buttonPanel, BorderLayout.PAGE_END);
 
-        frame.add(panel);
-        frame.setLocationRelativeTo(null); // Center the window on the screen
-        frame.setVisible(true);
+        JOptionPane.showMessageDialog(this, panel, "Pay Report Fees", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void displayAllQRCodes() {
+        java.util.List<Person> persons = personDAO.getAllPersons();
+        java.util.List<Vehicle> vehicles = vehicleDAO.getAllVehicles();
+        javax.swing.JPanel qrPanel = new javax.swing.JPanel();
+        qrPanel.setLayout(new java.awt.GridLayout(0, 2, 20, 20));
+        int qrSize = 120;
+        // Persons
+        for (Person p : persons) {
+            try {
+                java.awt.image.BufferedImage img = QRCodeGenerator.generateQRCodeImage(p.getQrCode(), qrSize, qrSize);
+                javax.swing.JLabel label = new javax.swing.JLabel("<html>Person: " + p.getFirstName() + " " + p.getLastName() + "<br>ID: " + p.getNationalId() + "</html>", javax.swing.SwingConstants.CENTER);
+                label.setIcon(new javax.swing.ImageIcon(img));
+                label.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+                label.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+                qrPanel.add(label);
+            } catch (Exception e) {
+                // skip
+            }
+        }
+        // Vehicles
+        for (Vehicle v : vehicles) {
+            try {
+                java.awt.image.BufferedImage img = QRCodeGenerator.generateQRCodeImage(v.getQrCode(), qrSize, qrSize);
+                javax.swing.JLabel label = new javax.swing.JLabel("<html>Vehicle: " + v.getPlateNumber() + "<br>Type: " + v.getType() + "</html>", javax.swing.SwingConstants.CENTER);
+                label.setIcon(new javax.swing.ImageIcon(img));
+                label.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+                label.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+                qrPanel.add(label);
+            } catch (Exception e) {
+                // skip
+            }
+        }
+        javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane(qrPanel);
+        scrollPane.setPreferredSize(new java.awt.Dimension(800, 600));
+        javax.swing.JOptionPane.showMessageDialog(this, scrollPane, "All QR Codes", javax.swing.JOptionPane.PLAIN_MESSAGE);
     }
 
     private void logout() {

@@ -23,6 +23,7 @@ public class Vehicle {
     private int ownerId;
     private String currentLocation;
     private String notes;
+    private String qrCode;
 
     // Constructor
     public Vehicle(int vehicleId, String plateNumber, String registrationNumber, String type, String make,
@@ -215,6 +216,14 @@ public class Vehicle {
         this.notes = notes;
     }
 
+    public String getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
+    }
+
     @Override
     public String toString() {
         return "Vehicle{" +
@@ -238,6 +247,7 @@ public class Vehicle {
                 ", ownerId=" + ownerId +
                 ", currentLocation='" + currentLocation + '\'' +
                 ", notes='" + notes + '\'' +
+                ", qrCode='" + qrCode + '\'' +
                 '}';
     }
 }
