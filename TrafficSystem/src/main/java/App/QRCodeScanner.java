@@ -1,7 +1,6 @@
 package App;
 
 import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamImageTransformer;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
 import com.google.zxing.*;
@@ -9,7 +8,6 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class QRCodeScanner {

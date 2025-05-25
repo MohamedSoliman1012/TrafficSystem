@@ -1,3 +1,4 @@
+
 package com.AavengersTrafficControle.trafficsystem.model;
 
 import java.util.Date;
