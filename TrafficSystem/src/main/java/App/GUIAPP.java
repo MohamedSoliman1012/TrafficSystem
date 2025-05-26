@@ -15,7 +15,6 @@ import com.AavengersTrafficControle.trafficsystem.model.Report;
 import java.sql.Connection;
 import java.util.List;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -26,7 +25,6 @@ import java.awt.Image;
 import java.awt.Graphics;
 import java.awt.Color;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 
 /**
  *
@@ -49,7 +47,6 @@ public class GUIAPP extends javax.swing.JFrame {
     private javax.swing.JButton searchVehicleByQRCodeButton;
     private javax.swing.JButton searchPersonByQRCodeButton;
     private javax.swing.JButton displayQRCodesButton;
-    private javax.swing.JLabel backgroundLabel;
     ImageIcon AddS = new ImageIcon("background.jpg"); 
     final Image Adds = AddS.getImage();
     
@@ -212,7 +209,7 @@ public class GUIAPP extends javax.swing.JFrame {
         // Set the main frame layout
         getContentPane().setLayout(new java.awt.BorderLayout());
         getContentPane().add(TrafficSystem, java.awt.BorderLayout.CENTER);
-        setSize(5000, 5000); // Make window extremely large
+        setSize(1000, 750); // Make window extremely large
         setResizable(false); // Not resizable
         // pack(); // REMOVE or comment out this line to prevent overriding setSize
         setMinimumSize(new java.awt.Dimension(400, 400));
