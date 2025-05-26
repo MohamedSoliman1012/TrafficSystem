@@ -165,6 +165,7 @@ INSERT INTO persons (
     ('Jef', 'Stark', 'ID105', '1995-09-23', '654 Police Ave, Town', '555-0105', 'jef.stark@police.com', 'Male', 'O-', NULL, NULL, NULL),
     ('John', 'Doe', 'ID101', '1985-04-12', '123 Main St, NY', '555-1234', 'john.doe@example.com', 'Male', 'A+', 'Jane Doe', '555-5678', NULL),
     ('Alice', 'Smith', 'ID002', '1990-06-22', '456 Elm St, LA', '555-2345', 'alice.smith@example.com', 'Female', 'B+', 'Bob Smith', '555-6789', NULL),
+    ('Engy', 'Mohamed', 'ID133', '2006-03-13', 'Alexandria, Egypt', '01000000000', 'EngyMohamed@gmail.com', 'Female', 'A+', 'Mona Mohamed', '01000000001', 'ID133'),
     ('Carlos', 'Rivera', 'ID003', '1975-03-30', '789 Pine St, CHI', '555-3456', 'carlos.r@example.com', 'Male', 'O+', 'Maria Rivera', '555-7890', NULL),
     ('Emily', 'Blunt', 'NID005', '1992-02-15', 'Miami, FL', '555-4567', 'emily.blunt@example.com', 'Female', 'O-', 'Sarah Blunt', '555-8901', NULL),
     ('Tom', 'Hardy', 'ID006', '1988-11-07', 'San Francisco, CA', '555-5678', 'tom.hardy@example.com', 'Male', 'B-', 'Leo Hardy', '555-9012', NULL),
@@ -184,10 +185,10 @@ INSERT INTO police (
     (3, 1003, 'Lieutenant', 'Traffic Division', 'Parker', '12345678', '2019-01-10', 'Active', 'Traffic Control', 3),
     (4, 1004, 'Officer', 'Traffic Division', 'Tom', '12345678', '2020-04-20', 'Active', 'Accident Investigation', 4),
     (5, 1005, 'Officer', 'Traffic Division', 'Tony', '12345678', '2021-02-15', 'Active', 'Traffic Control', 4),
-    (12, 1006, 'Sergeant', 'Traffic Division', 'SophiaW', 'password12', '2022-01-10', 'Active', 'Patrol', 3),
-    (13, 1007, 'Officer', 'Traffic Division', 'MichaelJ', 'password13', '2023-03-05', 'Active', 'Enforcement', 4),
-    (10, 101, 'Sergeant', 'Traffic Division', 'emilyb', 'securepass123', '2020-01-01', 'Active', 'Traffic Violation', 3),
-    (11, 102, 'Lieutenant', 'Highway Patrol', 'tomh', 'pass456', '2018-07-15', 'Active', 'Accident Investigation', 2);
+    (13, 1006, 'Sergeant', 'Traffic Division', 'SophiaW', 'password12', '2022-01-10', 'Active', 'Patrol', 3),
+    (14, 1007, 'Officer', 'Traffic Division', 'MichaelJ', 'password13', '2023-03-05', 'Active', 'Enforcement', 4),
+    (11, 101, 'Sergeant', 'Traffic Division', 'emilyb', 'securepass123', '2020-01-01', 'Active', 'Traffic Violation', 3),
+    (12, 102, 'Lieutenant', 'Highway Patrol', 'tomh', 'pass456', '2018-07-15', 'Active', 'Accident Investigation', 2);
 
 -- Drivers
 INSERT INTO drivers (
@@ -201,12 +202,13 @@ INSERT INTO drivers (
     (5, 'DL901234', '2022-11-10', '2027-11-10', 'E', 0, 'Active', NULL, 0),
     (6, 'LIC001', '2020-01-01', '2025-01-01', 'B', 3, 'Active', 'None', 2),
     (7, 'LIC002', '2021-03-10', '2026-03-10', 'A', 1, 'Active', 'None', 1),
-    (8, 'LIC003', '2019-06-01', '2024-06-01', 'D', 0, 'Active', 'School Zone Only', 0),
-    (9, 'LIC004', '2023-05-01', '2028-05-01', 'B', 0, 'Active', NULL, 0),
-    (10, 'LIC005', '2017-09-15', '2027-09-15', 'C', 2, 'Active', NULL, 1),
-    (11, 'LIC006', '2016-12-20', '2026-12-20', 'A', 0, 'Active', NULL, 0),
-    (14, 'LIC007', '2018-04-05', '2028-04-05', 'B', 1, 'Active', 'Night Only', 2),
-    (15, 'LIC008', '2019-08-30', '2029-08-30', 'D', 0, 'Active', NULL, 0);
+    (8, 'ENGY133', '2024-01-01', '2029-01-01', 'B', 0, 'Active', NULL, 0),
+    (9, 'LIC003', '2019-06-01', '2024-06-01', 'D', 0, 'Active', 'School Zone Only', 0),
+    (10, 'LIC004', '2023-05-01', '2028-05-01', 'B', 0, 'Active', NULL, 0),
+    (11, 'LIC005', '2017-09-15', '2027-09-15', 'C', 2, 'Active', NULL, 1),
+    (12, 'LIC006', '2016-12-20', '2026-12-20', 'A', 0, 'Active', NULL, 0),
+    (15, 'LIC007', '2018-04-05', '2028-04-05', 'B', 1, 'Active', 'Night Only', 2),
+    (16, 'LIC008', '2019-08-30', '2029-08-30', 'D', 0, 'Active', NULL, 0);
 
 -- Vehicles
 INSERT INTO vehicles (
@@ -219,15 +221,17 @@ INSERT INTO vehicles (
     ('XYZ789', 'REG002', 'Motorcycle', 'Honda', 'CBR600', 2021, 'Red', 'Petrol', 'ENG002', 'CHS002', 2, 'Active',
      '2021-03-15', '2026-03-15', 'Progressive', '2024-12-31', 7, 'Los Angeles', 'Track ready', 'XYZ789'),
     ('BUS456', 'REG003', 'Bus', 'Mercedes', 'Sprinter', 2019, 'White', 'Diesel', 'ENG003', 'CHS003', 20, 'Active',
-     '2019-06-01', '2024-06-01', 'Allstate', '2024-12-31', 8, 'Chicago', 'School bus', 'BUS456'),
+     '2019-06-01', '2024-06-01', 'Allstate', '2024-12-31', 9, 'Chicago', 'School bus', 'BUS456'),
+    ('POR133', 'REG133', 'Car', 'Porsche', 'GT3 RS', 2024, 'Pink', 'Petrol', 'ENG133', 'CHS133', 2, 'Active',
+     '2024-03-13', '2029-03-13', 'AXA', '2029-03-12', 8, 'Alexandria', 'Engy Mohamed''s Porsche GT3 RS', 'POR133'),
     ('POR123', 'REG006', 'Car', 'Porsche', 'GT3 RS', 2023, 'Blue', 'Petrol', 'ENG006', 'CHS006', 2, 'Active',
-     '2023-05-01', '2028-05-01', 'AXA', '2027-12-31', 9, 'Cairo', 'High-performance sports car', 'POR123'),
+     '2023-05-01', '2028-05-01', 'AXA', '2027-12-31', 10, 'Cairo', 'High-performance sports car', 'POR123'),
     ('DEF456', 'REG004', 'Car', 'BMW', 'M5', 2022, 'Black', 'Petrol', 'ENG004', 'CHS004', 5, 'Active',
      '2022-02-01', '2027-02-01', 'Geico', '2024-12-31', 6, 'Miami', 'High performance', 'DEF456'),
     ('MOTO789', 'REG005', 'Motorcycle', 'Ducati', 'Panigale', 2023, 'Yellow', 'Petrol', 'ENG005', 'CHS005', 2, 'Active',
      '2023-01-10', '2028-01-10', 'Liberty Mutual', '2024-12-31', 7, 'San Francisco', 'Superbike', 'MOTO789'),
     ('CAR000', 'REG100', 'Car', 'Mercedes', 'G Class', 2025, 'Black', 'Petrol', 'ENG100', 'CHS100', 5, 'Active',
-     '2025-05-21', '2030-05-21', 'Allianz', '2030-05-20', 16, 'Alexandria', 'Luxury SUV', 'CAR000'),
+     '2025-05-21', '2030-05-21', 'Allianz', '2030-05-20', 17, 'Alexandria', 'Luxury SUV', 'CAR000'),
     ('BM1', 'REG200', 'Car', 'BMW', 'M3', 2022, 'Black', 'Petrol', 'ENG200', 'CHS200', 5, 'Active',
      '2022-01-01', '2027-01-01', 'Geico', '2026-12-31', (SELECT person_id FROM persons WHERE national_id = 'ID219'), 'Kafr Eldawar', 'Mohamed Soliman''s BMW', 'BM1'),
     ('POR1', 'REG201', 'Car', 'Porsche', '911', 2023, 'Red', 'Petrol', 'ENG201', 'CHS201', 2, 'Active',
@@ -245,7 +249,7 @@ INSERT INTO cars (
     (1, 4, 'Sedan', 'Automatic', 'FWD', 450, true, 'Toyota Entune', 8, false),
     (4, 2, 'Coupe', 'Automatic', 'RWD', 310, true, 'Porsche PCM', 6, true),
     (5, 4, 'Sedan', 'Automatic', 'AWD', 530, true, 'iDrive 8', 10, true),
-    (7, 5, 'SUV', 'Automatic', 'AWD', 640, true, 'MBUX', 10, true);
+    (8, 5, 'SUV', 'Automatic', 'AWD', 640, true, 'MBUX', 10, true);
 
 -- Motorcycles
 INSERT INTO motorcycles (
@@ -270,11 +274,11 @@ INSERT INTO reports (
     description, fine, points_deducted, status, evidence, witness_statement,
     due_date, is_paid, report_type
 ) VALUES
-    (10, 6, 1, '2024-05-01 14:30:00', 'Speeding', '5th Ave, NY',
+    (11, 6, 1, '2024-05-01 14:30:00', 'Speeding', '5th Ave, NY',
      'Driver was going 80 in a 50 zone', 150.00, 2, 'Open', 'Speed camera footage', 'Witness saw the vehicle speeding', '2024-06-01', false, 'Regular'),
-    (11, 7, 2, '2024-04-20 10:00:00', 'Running red light', 'Sunset Blvd, LA',
+    (12, 7, 2, '2024-04-20 10:00:00', 'Running red light', 'Sunset Blvd, LA',
      'Driver failed to stop at red light', 200.00, 3, 'Paid', 'Traffic light footage', NULL, '2024-05-20', false, 'Regular'),
-    (10, 9, 4, '2024-05-10 11:15:00', 'Illegal street racing', 'Nasr City, Cairo',
+    (11, 9, 4, '2024-05-10 11:15:00', 'Illegal street racing', 'Nasr City, Cairo',
      'Porsche was seen racing another car', 1000.00, 5, 'Pending', 'Drone video', 'Multiple bystanders reported noise', '2024-06-10', false, 'Criminal');
 
 -- For persons: set qr_code = national_id if not already set
