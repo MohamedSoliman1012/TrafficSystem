@@ -301,6 +301,7 @@ public class GUIAPP extends javax.swing.JFrame {
             mainMenuPanel.add(createReportButton);
             mainMenuPanel.add(viewMyReportsButton);
             mainMenuPanel.add(viewAllReportsButton);
+            mainMenuPanel.add(payReportFeesButton);
             mainMenuPanel.add(logoutButton);
             mainMenuPanel.add(exitButton);
         } else if (rank == 2) {
