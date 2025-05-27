@@ -121,6 +121,22 @@ public class PersonDAO {
         return people;
     }
 
+    // Get criminal status for a person
+    public String getCriminalStatusById(int personId) {
+        String sql = "SELECT criminal_status FROM persons WHERE person_id = ?";
+        try (java.sql.Connection conn = DatabaseConnection.getConnection();
+             java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, personId);
+            java.sql.ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("criminal_status");
+            }
+        } catch (Exception e) {
+            System.out.println("Error fetching criminal status: " + e.getMessage());
+        }
+        return "Unknown";
+    }
+
     private Person extractPersonFromResultSet(ResultSet rs) throws SQLException {
         return new Person(
             rs.getInt("person_id"),

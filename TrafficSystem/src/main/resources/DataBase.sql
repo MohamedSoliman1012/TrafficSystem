@@ -37,7 +37,8 @@ CREATE TABLE vehicles (
     owner_id INTEGER NOT NULL,
     current_location VARCHAR(100),
     notes TEXT,
-    qr_code VARCHAR(255) UNIQUE
+    qr_code VARCHAR(255) UNIQUE,
+    is_stolen BOOLEAN DEFAULT FALSE
 );
 
 -- Car Table (Extends Vehicle)
@@ -99,7 +100,8 @@ CREATE TABLE persons (
     blood_type VARCHAR(5),
     emergency_contact VARCHAR(100),
     emergency_phone VARCHAR(20),
-    qr_code VARCHAR(255) UNIQUE
+    qr_code VARCHAR(255) UNIQUE,
+    criminal_status VARCHAR(20) DEFAULT 'None'
 );
 
 -- Police Table (Extends Persons)

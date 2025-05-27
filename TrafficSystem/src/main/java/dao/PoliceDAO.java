@@ -250,7 +250,6 @@ public class PoliceDAO extends VehicleDAO {
     
     private Police extractPoliceFromResultSet(ResultSet rs) throws SQLException {
         Police police = new Police();
-      
         police.setPersonId(rs.getInt("person_id"));
         police.setFirstName(rs.getString("first_name"));
         police.setLastName(rs.getString("last_name"));
@@ -261,8 +260,8 @@ public class PoliceDAO extends VehicleDAO {
         police.setEmail(rs.getString("email"));
         police.setGender(rs.getString("gender"));
         police.setBloodType(rs.getString("blood_type"));
-        
-
+        police.setEmergencyContact(rs.getString("emergency_contact"));
+        police.setEmergencyPhone(rs.getString("emergency_phone"));
         police.setBadgeNumber(rs.getInt("badge_number"));
         police.setRank(rs.getString("rank"));
         police.setDepartment(rs.getString("department"));
@@ -271,7 +270,8 @@ public class PoliceDAO extends VehicleDAO {
         police.setJoinDate(rs.getDate("join_date"));
         police.setStatus(rs.getString("status"));
         police.setSpecialization(rs.getString("specialization"));
-        
+        // Fix: set rankLevel from the correct column in the police table
+        police.setRankLevel(rs.getInt("rank_level"));
         return police;
     }
     

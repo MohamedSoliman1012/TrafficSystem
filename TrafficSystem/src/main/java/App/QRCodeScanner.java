@@ -8,6 +8,9 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 
 import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 public class QRCodeScanner {
@@ -19,13 +22,23 @@ public class QRCodeScanner {
         JFrame window = new JFrame("QR Code Scanner - License Plate");
         WebcamPanel panel = new WebcamPanel(webcam);
 
-        window.add(panel);
+        // Add a close button so user can dip whenever
+        JButton closeBtn = new JButton("Close");
+        closeBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                webcam.close();
+                window.dispose();
+            }
+        });
+        window.setLayout(new BorderLayout());
+        window.add(panel, BorderLayout.CENTER);
+        window.add(closeBtn, BorderLayout.SOUTH);
         window.pack();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setVisible(true);
 
         // Scan loop
-        while (true) {
+        while (window.isDisplayable()) {
             BufferedImage image = webcam.getImage();
             if (image != null) {
                 String result = decodeQRCode(image);
@@ -53,12 +66,22 @@ public class QRCodeScanner {
         JFrame window = new JFrame("QR Code Scanner");
         WebcamPanel panel = new WebcamPanel(webcam);
         panel.setFPSDisplayed(true);
-        window.add(panel);
+        // Add a close button so user can bounce whenever
+        JButton closeBtn = new JButton("Close");
+        closeBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                webcam.close();
+                window.dispose();
+            }
+        });
+        window.setLayout(new BorderLayout());
+        window.add(panel, BorderLayout.CENTER);
+        window.add(closeBtn, BorderLayout.SOUTH);
         window.pack();
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setVisible(true);
         String resultText = null;
-        while (resultText == null) {
+        while (resultText == null && window.isDisplayable()) {
             BufferedImage image = webcam.getImage();
             if (image != null) {
                 resultText = decodeQRCode(image);

@@ -90,6 +90,22 @@ public class VehicleDAO {
         return vehicles;
     }
     
+    // Get stolen status for a vehicle
+    public boolean isVehicleStolen(int vehicleId) {
+        String sql = "SELECT is_stolen FROM vehicles WHERE vehicle_id = ?";
+        try (java.sql.Connection conn = DatabaseConnection.getConnection();
+             java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, vehicleId);
+            java.sql.ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getBoolean("is_stolen");
+            }
+        } catch (Exception e) {
+            System.out.println("Error fetching stolen status: " + e.getMessage());
+        }
+        return false;
+    }
+    
     protected Vehicle extractVehicleFromResultSet(ResultSet rs) throws SQLException {
         Vehicle vehicle = new Vehicle();
         vehicle.setVehicleId(rs.getInt("vehicle_id"));

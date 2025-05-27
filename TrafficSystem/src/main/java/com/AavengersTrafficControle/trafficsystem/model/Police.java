@@ -60,6 +60,13 @@ public class Police extends Person {
         this.rankLevel = rankLevel;
     }
 
+    // Get the user's role as a string (admin/search)
+    public String getRole() {
+        // Let's say rankLevel 1 is admin, others are search
+        if (this.rankLevel == 1) return "admin";
+        return "search";
+    }
+
     @Override
     public String toString() {
         return super.toString() +
@@ -72,4 +79,4 @@ public class Police extends Person {
                 ", Specialization: " + specialization +
                 ", Rank Level: " + rankLevel;
     }
-} 
+}
