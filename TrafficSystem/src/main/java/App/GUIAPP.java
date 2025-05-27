@@ -47,6 +47,7 @@ public class GUIAPP extends javax.swing.JFrame {
     private javax.swing.JButton displayQRCodesButton;
     ImageIcon AddS = new ImageIcon("background.jpg"); 
     final Image Adds = AddS.getImage();
+    private Police currentUser; // Store the logged-in police user
     
     /**
      * Custom JPanel that paints the background image.
@@ -223,6 +224,7 @@ public class GUIAPP extends javax.swing.JFrame {
         Police user = policeDAO.authenticate(username, password);
         if (user != null) {
             javax.swing.JOptionPane.showMessageDialog(this, "Login successful!", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            this.currentUser = user; // Set the current user
             if (onLoginSuccess != null) {
                 onLoginSuccess.accept(user);
             }
@@ -288,14 +290,33 @@ public class GUIAPP extends javax.swing.JFrame {
         javax.swing.JButton payReportFeesButton = createStyledButton("Pay Report Fees");
         displayQRCodesButton = createStyledButton("Display QR Codes");
 
-        mainMenuPanel.add(vehicleSearchPanel);
-        mainMenuPanel.add(personSearchPanel);
-        mainMenuPanel.add(createReportButton);
-        mainMenuPanel.add(viewMyReportsButton);
-        mainMenuPanel.add(viewAllReportsButton);
-        mainMenuPanel.add(payReportFeesButton);
-        mainMenuPanel.add(displayQRCodesButton);
-        mainMenuPanel.add(logoutButton);
+        // Clear and add only the allowed buttons for the user's rank
+        mainMenuPanel.removeAll();
+        int rank = (currentUser != null) ? currentUser.getRankLevel() : 0;
+        if (rank == 1) {
+            mainMenuPanel.add(vehicleSearchPanel);
+            mainMenuPanel.add(personSearchPanel);
+            mainMenuPanel.add(createReportButton);
+            mainMenuPanel.add(viewMyReportsButton);
+            mainMenuPanel.add(viewAllReportsButton);
+            mainMenuPanel.add(payReportFeesButton);
+            mainMenuPanel.add(displayQRCodesButton);
+            mainMenuPanel.add(logoutButton);
+        } else if (rank == 2) {
+            mainMenuPanel.add(vehicleSearchPanel);
+            mainMenuPanel.add(logoutButton);
+        } else if (rank == 3) {
+            mainMenuPanel.add(personSearchPanel);
+            mainMenuPanel.add(logoutButton);
+        } else {
+            mainMenuPanel.add(vehicleSearchPanel);
+            mainMenuPanel.add(personSearchPanel);
+            mainMenuPanel.add(createReportButton);
+            mainMenuPanel.add(viewMyReportsButton);
+            mainMenuPanel.add(payReportFeesButton);
+            mainMenuPanel.add(displayQRCodesButton);
+            mainMenuPanel.add(logoutButton);
+        }
 
         // Add missing action listeners for the other buttons
         createReportButton.addActionListener(evt -> createNewReport());
@@ -551,7 +572,7 @@ public class GUIAPP extends javax.swing.JFrame {
                 int confirm = javax.swing.JOptionPane.showConfirmDialog(this, new javax.swing.JLabel(confirmationMessage), "Confirm Report", javax.swing.JOptionPane.OK_CANCEL_OPTION);
                 if (confirm == javax.swing.JOptionPane.OK_OPTION) {
                     Report report = new Report();
-                    report.setPoliceId(1);
+                    report.setPoliceId(currentUser != null ? currentUser.getPersonId() : 1);
                     report.setDriverId(driverId);
                     report.setVehicleId(vehicleId);
                     report.setViolationType(violationType);
@@ -581,7 +602,8 @@ public class GUIAPP extends javax.swing.JFrame {
 
     private void viewMyReports() {
         try {
-            List<Report> reports = policeDAO.getReportsByPoliceId(1); 
+            int policeId = (currentUser != null) ? currentUser.getPersonId() : 1;
+            List<Report> reports = policeDAO.getReportsByPoliceId(policeId); 
             if (reports != null && !reports.isEmpty()) {
                 StringBuilder result = new StringBuilder("Your Reports:\n\n");
                 for (Report report : reports) {
