@@ -2,6 +2,7 @@ package com.AavengersTrafficControle.trafficsystem.model;
 
 import java.util.Date;
 
+// Yo, this is the Truck class, handles all the truck stuff for the system
 public class Truck extends Vehicle {
 
     private String truckType;
@@ -16,7 +17,7 @@ public class Truck extends Vehicle {
     private String registrationCountry;
     private Date inspectionDueDate;
 
-    // Constructor
+    // Constructor (just sets up the truck, nothing special)
     public Truck(int vehicleId, String plateNumber, String registrationNumber, String type,
                  String make, String model, int year, String color, String fuelType,
                  String engineNumber, String chassisNumber, int seats, String vehicleStatus,
@@ -44,7 +45,7 @@ public class Truck extends Vehicle {
         this.inspectionDueDate = inspectionDueDate;
     }
 
-    // Getters and Setters
+    // Getters and Setters (just the usual, nothing wild)
     public String getTruckType() {
         return truckType;
     }
@@ -135,6 +136,7 @@ public class Truck extends Vehicle {
 
     @Override
     public String toString() {
+        // This just prints out all the truck info, kinda long but whatever
         return super.toString() +
                ", Truck Type: " + truckType +
                ", Axles: " + axleCount +

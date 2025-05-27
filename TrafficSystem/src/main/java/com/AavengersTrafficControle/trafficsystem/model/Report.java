@@ -2,6 +2,7 @@ package com.AavengersTrafficControle.trafficsystem.model;
 
 import java.util.Date;
 
+// Yo, this is the Report class, handles all the report stuff for the system
 public class Report {
     private int reportId;
     private int policeId;
@@ -20,6 +21,7 @@ public class Report {
     private boolean isPaid;
     private String reportType; // New field for report type
 
+    // Constructor (just sets up the report, nothing special)
     public Report() {}
 
     public Report(int reportId, int policeId, int driverId, int vehicleId,
@@ -44,7 +46,7 @@ public class Report {
         this.isPaid = isPaid;
     }
 
-    // Getters and Setters
+    // Getters and Setters (just the usual, nothing wild)
     public int getReportId() { return reportId; }
     public void setReportId(int reportId) { this.reportId = reportId; }
     public int getPoliceId() { return policeId; }
@@ -80,6 +82,7 @@ public class Report {
 
     @Override
     public String toString() {
+        // This just prints out all the report info, kinda long but whatever
         return "Report{" +
                 "reportId=" + reportId +
                 ", policeId=" + policeId +

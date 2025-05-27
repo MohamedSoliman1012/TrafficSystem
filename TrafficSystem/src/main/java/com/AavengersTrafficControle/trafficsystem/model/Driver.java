@@ -1,15 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.AavengersTrafficControle.trafficsystem.model;
 
 import java.util.Date;
 
-/**
- *
- * @author mohamedsoliman
- */
+// Yo, this is the Driver class, handles all the driver stuff for the system
 public class Driver extends Person {
     private String licenseNumber;
     private Date licenseIssueDate;
@@ -20,6 +13,7 @@ public class Driver extends Person {
     private String restrictions;
     private int totalViolations;
 
+    // Constructor (just sets up the driver, nothing special)
     public Driver() {
         super();
     }
@@ -42,7 +36,7 @@ public class Driver extends Person {
         this.totalViolations = totalViolations;
     }
 
-    // Getters and Setters
+    // Getters and Setters (just the usual, nothing wild)
     public String getLicenseNumber() { return licenseNumber; }
     public void setLicenseNumber(String licenseNumber) { this.licenseNumber = licenseNumber; }
     public Date getLicenseIssueDate() { return licenseIssueDate; }
@@ -62,6 +56,7 @@ public class Driver extends Person {
 
     @Override
     public String toString() {
+        // This just prints out all the driver info, kinda long but whatever
         return super.toString() +
                 ", License Number: " + licenseNumber +
                 ", License Issue Date: " + licenseIssueDate +

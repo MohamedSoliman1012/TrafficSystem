@@ -1,5 +1,6 @@
 package com.AavengersTrafficControle.trafficsystem.model;
 
+// Yo, this is the Motorcycle class, for all the bike stuff in the system
 public class Motorcycle extends Vehicle {
 
     private int engineCapacityCc;
@@ -13,7 +14,7 @@ public class Motorcycle extends Vehicle {
     private int numberOfStrokes;
     private int topSpeedKph;
 
-    // Constructor
+    // Constructor (just sets up the motorcycle, nothing fancy)
     public Motorcycle(int vehicleId, String plateNumber, String registrationNumber, String type,
                       String make, String model, int year, String color, String fuelType,
                       String engineNumber, String chassisNumber, int seats, String vehicleStatus,
@@ -41,7 +42,7 @@ public class Motorcycle extends Vehicle {
         this.topSpeedKph = topSpeedKph;
     }
 
-    // Getters and Setters
+    // Getters and Setters (just the usual, nothing wild)
     public int getEngineCapacityCc() {
         return engineCapacityCc;
     }
@@ -125,6 +126,7 @@ public class Motorcycle extends Vehicle {
     // Override toString to add more info
     @Override
     public String toString() {
+        // This just prints out all the motorcycle info, kinda long but whatever
         return super.toString() + 
                ", Motorcycle Type: " + motorcycleType +
                ", Engine CC: " + engineCapacityCc +

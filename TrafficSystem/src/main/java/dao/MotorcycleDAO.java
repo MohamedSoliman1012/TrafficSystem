@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import com.AavengersTrafficControle.trafficsystem.model.Motorcycle;
@@ -9,10 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author mohamedsoliman
- */
+// Yo, this is the MotorcycleDAO, deals with motorcycle stuff in the DB
 public class MotorcycleDAO extends VehicleDAO {
     public MotorcycleDAO() {
         super();

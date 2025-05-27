@@ -7,6 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// Yo, this is the PoliceDAO, deals with police stuff in the DB
 public class PoliceDAO extends VehicleDAO {
 
     private Connection connection;

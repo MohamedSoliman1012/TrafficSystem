@@ -10,6 +10,7 @@ import java.util.Date;
  *
  * @author mohamedsoliman
  */
+// Yo, this is the Person class, handles all the basic info for peeps
 public class Person {
     private int personId;
     private String firstName;
@@ -44,7 +45,7 @@ public class Person {
         this.emergencyPhone = emergencyPhone;
     }
 
-    // Getters and Setters
+    // Getters and Setters (just the usual stuff, nothing fancy)
     public int getPersonId() { return personId; }
     public void setPersonId(int personId) { this.personId = personId; }
     public String getFirstName() { return firstName; }

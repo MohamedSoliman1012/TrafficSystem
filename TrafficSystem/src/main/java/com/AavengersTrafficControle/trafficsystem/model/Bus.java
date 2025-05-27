@@ -2,6 +2,7 @@ package com.AavengersTrafficControle.trafficsystem.model;
 
 import java.util.Date;
 
+// Yo, this is the Bus class, handles all the bus stuff for the system
 public class Bus extends Vehicle {
 
     private String busType;
@@ -16,7 +17,7 @@ public class Bus extends Vehicle {
     private String ticketingSystemType;
     private boolean airConditioned;
 
-    // Constructor
+    // Constructor (just sets up the bus, nothing special)
     public Bus(int vehicleId, String plateNumber, String registrationNumber, String type,
                String make, String model, int year, String color, String fuelType,
                String engineNumber, String chassisNumber, int seats, String vehicleStatus,
@@ -44,7 +45,7 @@ public class Bus extends Vehicle {
         this.airConditioned = airConditioned;
     }
 
-    // Getters and Setters
+    // Getters and Setters (just the usual, nothing wild)
     public String getBusType() {
         return busType;
     }
@@ -135,6 +136,7 @@ public class Bus extends Vehicle {
 
     @Override
     public String toString() {
+        // This just prints out all the bus info, kinda long but whatever
         return super.toString() +
                ", Bus Type: " + busType +
                ", Seating Capacity: " + seatingCapacity +

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import com.AavengersTrafficControle.trafficsystem.model.Car;
@@ -9,10 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author mohamedsoliman
- */
+// Yo, this is the CarDAO, deals with car stuff in the DB
 public class CarDAO extends VehicleDAO {
     
     public CarDAO() {

@@ -2,6 +2,7 @@ package com.AavengersTrafficControle.trafficsystem.model;
 
 import java.util.Date;
 
+// Yo, this is the Car class, handles all the car stuff for the system
 public class Car extends Vehicle {
 
     private int numberOfDoors;
@@ -14,7 +15,7 @@ public class Car extends Vehicle {
     private int airbags;
     private boolean isLuxury;
 
-    // Constructor
+    // Constructor (just sets up the car, nothing special)
     public Car(int vehicleId, String plateNumber, String registrationNumber, String type,
                String make, String model, int year, String color, String fuelType,
                String engineNumber, String chassisNumber, int seats, String vehicleStatus,
@@ -39,12 +40,12 @@ public class Car extends Vehicle {
         this.isLuxury = isLuxury;
     }
 
-    // Default constructor
+    // Default constructor (just in case you need an empty car)
     public Car() {
         super();
     }
 
-    // Getters and Setters
+    // Getters and Setters (just the usual, nothing wild)
     public int getNumberOfDoors() {
         return numberOfDoors;
     }
@@ -119,6 +120,7 @@ public class Car extends Vehicle {
 
     @Override
     public String toString() {
+        // This just prints out all the car info, kinda long but whatever
         return super.toString() +
                ", Number of Doors: " + numberOfDoors +
                ", Body Style: " + bodyStyle +
