@@ -2,8 +2,7 @@ package dao;
 
 import com.AavengersTrafficControle.trafficsystem.model.Motorcycle;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 // Yo, this is the MotorcycleDAO, deals with motorcycle stuff in the DB
 public class MotorcycleDAO extends VehicleDAO {
@@ -27,22 +26,7 @@ public class MotorcycleDAO extends VehicleDAO {
         return null;
     }
 
-    public List<Motorcycle> findByMotorcycleType(String motorcycleType) {
-        List<Motorcycle> motorcycles = new ArrayList<>();
-        String query = "SELECT v.*, m.* FROM vehicles v " +
-                      "JOIN motorcycles m ON v.vehicle_id = m.vehicle_id " +
-                      "WHERE m.motorcycle_type = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, motorcycleType);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                motorcycles.add(extractMotorcycleFromResultSet(rs));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error finding motorcycles: " + e.getMessage());
-        }
-        return motorcycles;
-    }
+
 
     public boolean insert(Motorcycle motorcycle) {
         String vehicleQuery = "INSERT INTO vehicles (plate_number, registration_number, type, " +

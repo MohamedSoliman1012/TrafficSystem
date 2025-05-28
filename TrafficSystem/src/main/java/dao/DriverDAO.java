@@ -2,8 +2,7 @@ package dao;
 
 import com.AavengersTrafficControle.trafficsystem.model.Driver;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 // Yo, this is the DriverDAO, deals with driver stuff in the DB
 public class DriverDAO {
@@ -27,21 +26,7 @@ public class DriverDAO {
         return null;
     }
 
-    public List<Driver> findByLastName(String lastName) {
-        List<Driver> drivers = new ArrayList<>();
-        String query = "SELECT * FROM drivers WHERE last_name = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, lastName);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                drivers.add(extractDriverFromResultSet(rs));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error finding drivers: " + e.getMessage());
-        }
-        return drivers;
-    }
-
+ 
     public boolean insert(Driver driver) {
         String query = "INSERT INTO drivers (first_name, last_name, national_id, date_of_birth, address, phone_number, email, gender, blood_type, emergency_contact, emergency_phone, license_number, license_issue_date, license_expiry_date, license_type, points, status, restrictions, total_violations) " +
                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

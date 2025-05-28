@@ -2,8 +2,8 @@ package dao;
 
 import com.AavengersTrafficControle.trafficsystem.model.Car;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+
+
 
 // Yo, this is the CarDAO, deals with car stuff in the DB
 public class CarDAO extends VehicleDAO {
@@ -29,42 +29,9 @@ public class CarDAO extends VehicleDAO {
         return null;
     }
     
-    public List<Car> findByBodyStyle(String bodyStyle) {
-        List<Car> cars = new ArrayList<>();
-        String query = "SELECT v.*, c.* FROM vehicles v " +
-                      "JOIN cars c ON v.vehicle_id = c.vehicle_id " +
-                      "WHERE c.body_style = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, bodyStyle);
-            ResultSet rs = stmt.executeQuery();
-            
-            while (rs.next()) {
-                cars.add(extractCarFromResultSet(rs));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error finding cars: " + e.getMessage());
-        }
-        return cars;
-    }
+
     
-    public List<Car> findByTransmission(String transmission) {
-        List<Car> cars = new ArrayList<>();
-        String query = "SELECT v.*, c.* FROM vehicles v " +
-                      "JOIN cars c ON v.vehicle_id = c.vehicle_id " +
-                      "WHERE c.transmission = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, transmission);
-            ResultSet rs = stmt.executeQuery();
-            
-            while (rs.next()) {
-                cars.add(extractCarFromResultSet(rs));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error finding cars: " + e.getMessage());
-        }
-        return cars;
-    }
-    
+
     public boolean insert(Car car) {
         String vehicleQuery = "INSERT INTO vehicles (plate_number, registration_number, type, " +
                             "make, model, year, color, fuel_type, engine_number, chassis_number, " +
