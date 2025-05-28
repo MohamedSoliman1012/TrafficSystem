@@ -107,7 +107,7 @@ TrafficSystem/
 
 ## License
 
-This project is licensed under the MIT License.
+open source
 
 ## Object-Oriented Programming Concepts Used
 
