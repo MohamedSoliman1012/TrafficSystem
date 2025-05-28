@@ -30,13 +30,22 @@ TrafficSystem/
 │       │   │   ├── Driver.java
 │       │   │   ├── Vehicle.java
 │       │   │   ├── Car.java
-│       │   │   └── Report.java
+│       │   │   ├── Report.java
+│       │   │   ├── Truck.java
+│       │   │   ├── Motorcycle.java
+│       │   │   ├── Bus.java
+│       │   │   
 │       │   └── dao/
 │       │       ├── PersonDAO.java
 │       │       ├── PoliceDAO.java
 │       │       ├── ReportsDAO.java
 │       │       ├── VehicleDAO.java
-│       │       └── DatabaseConnection.java
+│       │       ├── DatabaseConnection.java
+│       │       ├── DriverDAO.java
+│       │       ├── CarDAO.java
+│       │       ├── TruckDAO.java
+│       │       ├── MotorcycleDAO.java
+│       │       ├── BusDAO.java
 │       └── resources/
 │           ├── background.png
 │           └── DataBase.sql
