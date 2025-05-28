@@ -45,7 +45,7 @@ public class Bus extends Vehicle {
         this.airConditioned = airConditioned;
     }
 
-    // Getters and Setters (just the usual, nothing wild)
+    // Getters and Setters 
     public String getBusType() {
         return busType;
     }

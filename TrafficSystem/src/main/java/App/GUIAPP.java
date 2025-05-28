@@ -1,16 +1,9 @@
 package App;
 
-// Yo, this is the main GUI app for the traffic system, all the UI stuff goes here
+//  this is the main GUI app for the traffic system, all the UI stuff goes here
 
-import dao.PoliceDAO;
-import dao.VehicleDAO;
-import dao.DatabaseConnection;
-import dao.PersonDAO;
-import com.AavengersTrafficControle.trafficsystem.model.Police;
-import com.AavengersTrafficControle.trafficsystem.model.Driver;
-import com.AavengersTrafficControle.trafficsystem.model.Person;
-import com.AavengersTrafficControle.trafficsystem.model.Vehicle;
-import com.AavengersTrafficControle.trafficsystem.model.Report;
+import dao.*;
+import com.AavengersTrafficControle.trafficsystem.model.*;
 import java.sql.Connection;
 import java.util.List;
 import javax.swing.JComboBox;
@@ -89,7 +82,7 @@ public class GUIAPP extends javax.swing.JFrame {
                 System.out.println("Loaded background.png from resources.");
             } else {
                 System.err.println("background.png not found in resources. Trying absolute path...");
-                // Try absolute path as fallback (adjust path as needed)
+
                 java.io.File absFile = new java.io.File("c:/Users/moham/Documents/GitHub/TrafficSystem/TrafficSystem/src/main/resources/background.png");
                 if (absFile.exists()) {
                     bgImg = new javax.swing.ImageIcon(absFile.getAbsolutePath()).getImage();
@@ -212,8 +205,7 @@ public class GUIAPP extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.BorderLayout());
         getContentPane().add(TrafficSystem, java.awt.BorderLayout.CENTER);
         setSize(1000, 750); 
-        setResizable(false); // Not resizable
-        // pack(); // REMOVE or comment out this line to prevent overriding setSize
+        setResizable(false);
         setMinimumSize(new java.awt.Dimension(400, 400));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
@@ -295,30 +287,35 @@ public class GUIAPP extends javax.swing.JFrame {
         // Clear and add only the allowed buttons for the user's rank
         mainMenuPanel.removeAll();
         int rank = (currentUser != null) ? currentUser.getRankLevel() : 0;
-        if (rank == 1) {
-            mainMenuPanel.add(vehicleSearchPanel);
-            mainMenuPanel.add(personSearchPanel);
-            mainMenuPanel.add(createReportButton);
-            mainMenuPanel.add(viewMyReportsButton);
-            mainMenuPanel.add(viewAllReportsButton);
-            mainMenuPanel.add(payReportFeesButton);
-            mainMenuPanel.add(logoutButton);
-            mainMenuPanel.add(exitButton);
-        } else if (rank == 2) {
-            mainMenuPanel.add(vehicleSearchPanel);
-            mainMenuPanel.add(logoutButton);
-            mainMenuPanel.add(exitButton);
-        } else if (rank == 3) {
-            mainMenuPanel.add(personSearchPanel);
-            mainMenuPanel.add(logoutButton);
-            mainMenuPanel.add(exitButton);
-        } else {
-            mainMenuPanel.add(vehicleSearchPanel);
-            mainMenuPanel.add(personSearchPanel);
-            mainMenuPanel.add(createReportButton);
-            mainMenuPanel.add(viewMyReportsButton);
-            mainMenuPanel.add(logoutButton);
-            mainMenuPanel.add(exitButton);
+        switch (rank) {
+            case 1 -> {
+                mainMenuPanel.add(vehicleSearchPanel);
+                mainMenuPanel.add(personSearchPanel);
+                mainMenuPanel.add(createReportButton);
+                mainMenuPanel.add(viewMyReportsButton);
+                mainMenuPanel.add(viewAllReportsButton);
+                mainMenuPanel.add(payReportFeesButton);
+                mainMenuPanel.add(logoutButton);
+                mainMenuPanel.add(exitButton);
+            }
+            case 2 -> {
+                mainMenuPanel.add(vehicleSearchPanel);
+                mainMenuPanel.add(logoutButton);
+                mainMenuPanel.add(exitButton);
+            }
+            case 3 -> {
+                mainMenuPanel.add(personSearchPanel);
+                mainMenuPanel.add(logoutButton);
+                mainMenuPanel.add(exitButton);
+            }
+            default -> {
+                mainMenuPanel.add(vehicleSearchPanel);
+                mainMenuPanel.add(personSearchPanel);
+                mainMenuPanel.add(createReportButton);
+                mainMenuPanel.add(viewMyReportsButton);
+                mainMenuPanel.add(logoutButton);
+                mainMenuPanel.add(exitButton);
+            }
         }
 
         // Add missing action listeners for the other buttons

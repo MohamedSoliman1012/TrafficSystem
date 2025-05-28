@@ -46,43 +46,8 @@ public class BusDAO extends VehicleDAO {
         }
         return buses;
     }
-    
-    public List<Bus> findByRoute(String route) {
-        List<Bus> buses = new ArrayList<>();
-        String query = "SELECT v.*, b.* FROM vehicles v " +
-                      "JOIN buses b ON v.vehicle_id = b.vehicle_id " +
-                      "WHERE b.assigned_route = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, route);
-            ResultSet rs = stmt.executeQuery();
-            
-            while (rs.next()) {
-                buses.add(extractBusFromResultSet(rs));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error finding buses: " + e.getMessage());
-        }
-        return buses;
-    }
-    
-    public List<Bus> findByOperatorCompany(String company) {
-        List<Bus> buses = new ArrayList<>();
-        String query = "SELECT v.*, b.* FROM vehicles v " +
-                      "JOIN buses b ON v.vehicle_id = b.vehicle_id " +
-                      "WHERE b.operator_company = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, company);
-            ResultSet rs = stmt.executeQuery();
-            
-            while (rs.next()) {
-                buses.add(extractBusFromResultSet(rs));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error finding buses: " + e.getMessage());
-        }
-        return buses;
-    }
-    
+
+
     public boolean insert(Bus bus) {
         String vehicleQuery = "INSERT INTO vehicles (plate_number, registration_number, type, " +
                             "make, model, year, color, fuel_type, engine_number, chassis_number, " +
