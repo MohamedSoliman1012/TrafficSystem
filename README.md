@@ -10,7 +10,7 @@ Below are screenshots of the main features of the Traffic System application:
 
 ### Login Screen
 
-![Login Screen](screenshots/logIn.png)
+![Login Screen](screenshots/LogIn.png)
 
 ### Rank1 Main Menu
 
