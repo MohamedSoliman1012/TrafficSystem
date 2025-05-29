@@ -25,14 +25,8 @@ public class DatabaseConnection {
         return connection;
     }
     
-    public static void closeConnection() {
+    public static void closeConnection() throws SQLException {
         if (connection != null) {
-            try {
-                connection.close();
-                System.out.println("Database connection closed");
-            } catch (SQLException e) {
-                System.out.println("Error closing database connection: " + e.getMessage());
-            }
         }
     }
-} 
+}

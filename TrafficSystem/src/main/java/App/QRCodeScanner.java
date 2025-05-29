@@ -66,7 +66,10 @@ public class QRCodeScanner {
         JFrame window = new JFrame("QR Code Scanner");
         WebcamPanel panel = new WebcamPanel(webcam);
         panel.setFPSDisplayed(true);
-        // Add a close button so user can bounce whenever
+        panel.setImageSizeDisplayed(true); // Show image size
+        panel.setMirrored(true); // Mirror for natural webcam feel
+
+
         JButton closeBtn = new JButton("Close");
         closeBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -79,12 +82,17 @@ public class QRCodeScanner {
         window.add(closeBtn, BorderLayout.SOUTH);
         window.pack();
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        // Center the window on the screen
+        window.setLocationRelativeTo(null);
+
         window.setVisible(true);
         String resultText = null;
         while (resultText == null && window.isDisplayable()) {
             BufferedImage image = webcam.getImage();
             if (image != null) {
                 resultText = decodeQRCode(image);
+                // Show preview (already handled by WebcamPanel)
                 if (resultText != null) {
                     JOptionPane.showMessageDialog(window, "QR Code Detected: " + resultText);
                 }

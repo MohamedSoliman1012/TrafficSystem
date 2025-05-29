@@ -248,6 +248,25 @@ public class PoliceDAO extends VehicleDAO {
         return report;
     }
     
+    /**
+     * Change the password for a police user by personId.
+     * @param personId the police's person_id
+     * @param newPassword the new password (plain text)
+     * @return true if changed, false otherwise
+     */
+    public boolean changePassword(int personId, String newPassword) {
+        String sql = "UPDATE police SET password = ? WHERE person_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, newPassword);
+            stmt.setInt(2, personId);
+            int updated = stmt.executeUpdate();
+            return updated > 0;
+        } catch (SQLException e) {
+            System.out.println("Error changing password: " + e.getMessage());
+            return false;
+        }
+    }
+    
     private Police extractPoliceFromResultSet(ResultSet rs) throws SQLException {
         Police police = new Police();
         police.setPersonId(rs.getInt("person_id"));

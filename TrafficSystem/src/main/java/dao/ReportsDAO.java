@@ -5,7 +5,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// This class is for handling reports in the DB, nothing too crazy
 public class ReportsDAO {
     private Connection connection;
 

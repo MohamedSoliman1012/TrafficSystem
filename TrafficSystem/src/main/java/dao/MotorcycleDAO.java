@@ -3,8 +3,6 @@ package dao;
 import com.AavengersTrafficControle.trafficsystem.model.Motorcycle;
 import java.sql.*;
 
-
-// Yo, this is the MotorcycleDAO, deals with motorcycle stuff in the DB
 public class MotorcycleDAO extends VehicleDAO {
     public MotorcycleDAO() {
         super();
@@ -25,8 +23,6 @@ public class MotorcycleDAO extends VehicleDAO {
         }
         return null;
     }
-
-
 
     public boolean insert(Motorcycle motorcycle) {
         String vehicleQuery = "INSERT INTO vehicles (plate_number, registration_number, type, " +

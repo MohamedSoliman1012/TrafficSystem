@@ -283,12 +283,9 @@ INSERT INTO reports (
     (11, 9, 4, '2024-05-10 11:15:00', 'Illegal street racing', 'Nasr City, Cairo',
      'Porsche was seen racing another car', 1000.00, 5, 'Pending', 'Drone video', 'Multiple bystanders reported noise', '2024-06-10', false, 'Criminal');
 
--- For persons: set qr_code = national_id if not already set
+
 UPDATE persons SET qr_code = national_id WHERE qr_code IS NULL OR qr_code = '';
 
--- For vehicles: set qr_code = plate_number if not already set
+
 UPDATE vehicles SET qr_code = plate_number WHERE qr_code IS NULL OR qr_code = '';
 
--- =============================
--- DONE ✅ Your system is ready!
--- =============================

@@ -3,8 +3,6 @@ package dao;
 import com.AavengersTrafficControle.trafficsystem.model.Driver;
 import java.sql.*;
 
-
-// Yo, this is the DriverDAO, deals with driver stuff in the DB
 public class DriverDAO {
     private Connection connection;
 
@@ -26,7 +24,6 @@ public class DriverDAO {
         return null;
     }
 
- 
     public boolean insert(Driver driver) {
         String query = "INSERT INTO drivers (first_name, last_name, national_id, date_of_birth, address, phone_number, email, gender, blood_type, emergency_contact, emergency_phone, license_number, license_issue_date, license_expiry_date, license_type, points, status, restrictions, total_violations) " +
                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

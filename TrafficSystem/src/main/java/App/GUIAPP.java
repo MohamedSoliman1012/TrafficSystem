@@ -20,7 +20,7 @@ import javax.swing.ImageIcon;
 
 /**
  *
- * @author 
+ * @author MohamedSoliman
  */
 public class GUIAPP extends javax.swing.JFrame {
 
@@ -38,6 +38,7 @@ public class GUIAPP extends javax.swing.JFrame {
     private javax.swing.JButton logoutButton;
     private javax.swing.JButton searchVehicleByQRCodeButton;
     private javax.swing.JButton searchPersonByQRCodeButton;
+    private javax.swing.JButton changePasswordButton; // Add this field
 
     ImageIcon AddS = new ImageIcon("background.jpg"); 
     final Image Adds = AddS.getImage();
@@ -96,6 +97,17 @@ public class GUIAPP extends javax.swing.JFrame {
         }
         BackgroundPanel bgPanel = new BackgroundPanel(bgImg);
         setContentPane(bgPanel);
+
+        // Set application icon to traffic-camera.ico
+        try {
+            java.net.URL iconUrl = getClass().getResource("/traffic-camera.png");
+            if (iconUrl != null) {
+                setIconImage(new javax.swing.ImageIcon(iconUrl).getImage());
+            }
+        } catch (Exception e) {
+            System.err.println("Error setting app icon: " + e.getMessage());
+        }
+
         initComponents();
     }
 
@@ -204,9 +216,9 @@ public class GUIAPP extends javax.swing.JFrame {
         // Set the main frame layout
         getContentPane().setLayout(new java.awt.BorderLayout());
         getContentPane().add(TrafficSystem, java.awt.BorderLayout.CENTER);
-        setSize(1000, 750); 
+        setSize(1400, 900); // Increased window size for better representation
         setResizable(false);
-        setMinimumSize(new java.awt.Dimension(400, 400));
+        setMinimumSize(new java.awt.Dimension(800, 600));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -234,8 +246,41 @@ public class GUIAPP extends javax.swing.JFrame {
     private void initMainMenuPanel() {
         mainMenuPanel = new javax.swing.JPanel();
         mainMenuPanel.setOpaque(false);
-        mainMenuPanel.setLayout(new java.awt.GridLayout(8, 1, 15, 15));
+        mainMenuPanel.setLayout(new java.awt.GridBagLayout());
         mainMenuPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // --- Welcome Title ---
+        String userName = (currentUser != null) ? currentUser.getFirstName() + " " + currentUser.getLastName() : "User";
+        String rank = (currentUser != null) ? currentUser.getRank() : "";
+        String permissions;
+        int rankLevel = (currentUser != null) ? currentUser.getRankLevel() : 0;
+        switch (rankLevel) {
+            case 1 -> permissions = "Full access (Admin)";
+            case 2 -> permissions = "Vehicle search, logout, exit";
+            case 3 -> permissions = "Person search, logout, exit";
+            default -> permissions = "Standard access";
+        }
+
+        JLabel welcomeLabel = new JLabel("Welcome, " + userName + "!");
+        welcomeLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 36));
+        welcomeLabel.setForeground(new java.awt.Color(33, 150, 243));
+        welcomeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        JLabel subtitleLabel = new JLabel("Rank: " + rank + "   |   Permissions: " + permissions);
+        subtitleLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
+        subtitleLabel.setForeground(new java.awt.Color(76, 76, 76));
+        subtitleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gbc.insets = new java.awt.Insets(0, 0, 10, 0);
+        mainMenuPanel.add(welcomeLabel, gbc);
+
+        gbc.gridy++;
+        mainMenuPanel.add(subtitleLabel, gbc);
 
         // Create paired panel for vehicle search buttons
         javax.swing.JPanel vehicleSearchPanel = new javax.swing.JPanel(new java.awt.GridLayout(1, 2, 8, 0));
@@ -282,39 +327,68 @@ public class GUIAPP extends javax.swing.JFrame {
         logoutButton = createStyledButton("Logout");
         javax.swing.JButton payReportFeesButton = createStyledButton("Pay Report Fees");
         javax.swing.JButton exitButton = createStyledButton("Exit");
-    
+        changePasswordButton = createStyledButton("Change Password"); // New button
 
         // Clear and add only the allowed buttons for the user's rank
         mainMenuPanel.removeAll();
-        int rank = (currentUser != null) ? currentUser.getRankLevel() : 0;
-        switch (rank) {
+        int row = 2;
+        int rankLevelForMenu = (currentUser != null) ? currentUser.getRankLevel() : 0;
+        switch (rankLevelForMenu) {
             case 1 -> {
-                mainMenuPanel.add(vehicleSearchPanel);
-                mainMenuPanel.add(personSearchPanel);
-                mainMenuPanel.add(createReportButton);
-                mainMenuPanel.add(viewMyReportsButton);
-                mainMenuPanel.add(viewAllReportsButton);
-                mainMenuPanel.add(payReportFeesButton);
-                mainMenuPanel.add(logoutButton);
-                mainMenuPanel.add(exitButton);
+                gbc.gridy = row++;
+                mainMenuPanel.add(vehicleSearchPanel, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(personSearchPanel, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(createReportButton, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(viewMyReportsButton, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(viewAllReportsButton, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(payReportFeesButton, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(changePasswordButton, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(logoutButton, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(exitButton, gbc);
             }
             case 2 -> {
-                mainMenuPanel.add(vehicleSearchPanel);
-                mainMenuPanel.add(logoutButton);
-                mainMenuPanel.add(exitButton);
+                gbc.gridy = row++;
+                mainMenuPanel.add(vehicleSearchPanel, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(changePasswordButton, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(logoutButton, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(exitButton, gbc);
             }
             case 3 -> {
-                mainMenuPanel.add(personSearchPanel);
-                mainMenuPanel.add(logoutButton);
-                mainMenuPanel.add(exitButton);
+                gbc.gridy = row++;
+                mainMenuPanel.add(personSearchPanel, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(changePasswordButton, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(logoutButton, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(exitButton, gbc);
             }
             default -> {
-                mainMenuPanel.add(vehicleSearchPanel);
-                mainMenuPanel.add(personSearchPanel);
-                mainMenuPanel.add(createReportButton);
-                mainMenuPanel.add(viewMyReportsButton);
-                mainMenuPanel.add(logoutButton);
-                mainMenuPanel.add(exitButton);
+                gbc.gridy = row++;
+                mainMenuPanel.add(vehicleSearchPanel, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(personSearchPanel, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(createReportButton, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(viewMyReportsButton, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(changePasswordButton, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(logoutButton, gbc);
+                gbc.gridy = row++;
+                mainMenuPanel.add(exitButton, gbc);
             }
         }
 
@@ -330,6 +404,7 @@ public class GUIAPP extends javax.swing.JFrame {
                 System.exit(0);
             }
         });
+        changePasswordButton.addActionListener(evt -> showChangePasswordDialog());
 
     }
 
@@ -384,7 +459,6 @@ public class GUIAPP extends javax.swing.JFrame {
                         .append("<td>").append(v.getInsuranceExpiry()).append("</td>")
                         .append("<td>").append(v.getCurrentLocation()).append("</td>")
                         .append("<td>").append(v.getNotes()).append("</td>")
-
                         .append("</tr>");
                     vehicleTable.append("</table>");
 
@@ -404,7 +478,6 @@ public class GUIAPP extends javax.swing.JFrame {
                         .append("<td>").append(owner != null ? owner.getPhoneNumber() : "").append("</td>")
                         .append("<td>").append(owner != null ? owner.getEmail() : "").append("</td>")
                         .append("<td>").append(owner != null ? owner.getEmergencyContact() : "").append("</td>")
-
                         .append("</tr>");
                     vehicleTable.append("</table></body></html>");
 
@@ -423,43 +496,55 @@ public class GUIAPP extends javax.swing.JFrame {
         if (qrCode != null) {
             List<Vehicle> vehicles = vehicleDAO.findByQRCode(qrCode);
             if (!vehicles.isEmpty()) {
-                StringBuilder result = new StringBuilder("<html><body style='font-family:Segoe UI; font-size:14px;'>");
-                result.append("<h3>Vehicles Found:</h3><table border='1' style='border-collapse:collapse; width:100%;'>");
-                result.append("<tr><th>Plate Number</th><th>Owner Name</th><th>Owner National ID</th><th>Car Type</th><th>Color</th><th>Model</th><th>Year</th><th>Registration #</th><th>Fuel</th><th>Engine #</th><th>Chassis #</th><th>Seats</th><th>Status</th><th>Reg Date</th><th>Expiry</th><th>Insurance</th><th>Ins Expiry</th><th>Location</th><th>Notes</th><th>Stolen?</th><th>Reports</th></tr>");
                 for (Vehicle v : vehicles) {
-    String ownerName = policeDAO.getOwnerNameById(v.getOwnerId());
-    String ownerNationalId = policeDAO.getOwnerNationalIdById(v.getOwnerId());
-    List<Report> reports = policeDAO.getReportsByVehicleId(v.getVehicleId());
-    String reportStatus = reports.isEmpty() ? "No Reports" : "Has Reports";
-    String reportColor = reports.isEmpty() ? "green" : "red";
-    result.append("<tr>")
-          .append("<td>").append(v.getPlateNumber()).append("</td>")
-          .append("<td>").append(ownerName).append("</td>")
-          .append("<td>").append(ownerNationalId).append("</td>")
-          .append("<td>").append(v.getType()).append("</td>")
-          .append("<td>").append(v.getColor()).append("</td>")
-          .append("<td>").append(v.getModel()).append("</td>")
-          .append("<td>").append(v.getYear()).append("</td>")
-          .append("<td>").append(v.getRegistrationNumber()).append("</td>")
-          .append("<td>").append(v.getFuelType()).append("</td>")
-          .append("<td>").append(v.getEngineNumber()).append("</td>")
-          .append("<td>").append(v.getChassisNumber()).append("</td>")
-          .append("<td>").append(v.getSeats()).append("</td>")
-          .append("<td>").append(v.getVehicleStatus()).append("</td>")
-          .append("<td>").append(v.getRegistrationDate()).append("</td>")
-          .append("<td>").append(v.getExpiryDate()).append("</td>")
-          .append("<td>").append(v.getInsuranceProvider()).append("</td>")
-          .append("<td>").append(v.getInsuranceExpiry()).append("</td>")
-          .append("<td>").append(v.getCurrentLocation()).append("</td>")
-          .append("<td>").append(v.getNotes()).append("</td>")
+                    StringBuilder vehicleTable = new StringBuilder("<html><body style='font-family:Segoe UI; font-size:14px;'>");
+                    vehicleTable.append("<h3>Vehicle Information</h3>");
+                    vehicleTable.append("<table border='1' style='border-collapse:collapse; width:100%;'>");
+                    vehicleTable.append("<tr><th>Plate Number</th><th>Type</th><th>Color</th><th>Model</th><th>Year</th><th>Registration Number</th><th>Status</th><th>Fuel Type</th><th>Engine #</th><th>Chassis #</th><th>Seats</th><th>Reg Date</th><th>Expiry Date</th><th>Insurance</th><th>Ins Expiry</th><th>Location</th><th>Notes</th><th>Stolen?</th></tr>");
+                    vehicleTable.append("<tr>")
+                        .append("<td>").append(v.getPlateNumber()).append("</td>")
+                        .append("<td>").append(v.getType()).append("</td>")
+                        .append("<td>").append(v.getColor()).append("</td>")
+                        .append("<td>").append(v.getModel()).append("</td>")
+                        .append("<td>").append(v.getYear()).append("</td>")
+                        .append("<td>").append(v.getRegistrationNumber()).append("</td>")
+                        .append("<td>").append(v.getVehicleStatus()).append("</td>")
+                        .append("<td>").append(v.getFuelType()).append("</td>")
+                        .append("<td>").append(v.getEngineNumber()).append("</td>")
+                        .append("<td>").append(v.getChassisNumber()).append("</td>")
+                        .append("<td>").append(v.getSeats()).append("</td>")
+                        .append("<td>").append(v.getRegistrationDate()).append("</td>")
+                        .append("<td>").append(v.getExpiryDate()).append("</td>")
+                        .append("<td>").append(v.getInsuranceProvider()).append("</td>")
+                        .append("<td>").append(v.getInsuranceExpiry()).append("</td>")
+                        .append("<td>").append(v.getCurrentLocation()).append("</td>")
+                        .append("<td>").append(v.getNotes()).append("</td>")
+                        .append("</tr>");
+                    vehicleTable.append("</table>");
 
-          .append("<td style='color:").append(reportColor).append(";'>").append(reportStatus).append("</td>")
-          .append("</tr>");
-}
-result.append("</table></body></html>");
-javax.swing.JLabel resultLabel = new javax.swing.JLabel(result.toString());
-resultLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
-javax.swing.JOptionPane.showMessageDialog(this, resultLabel, "Search Results", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                    String ownerName = policeDAO.getOwnerNameById(v.getOwnerId());
+                    String ownerNationalId = policeDAO.getOwnerNationalIdById(v.getOwnerId());
+                    Person owner = personDAO.findById(v.getOwnerId());
+                    vehicleTable.append("<br><h3>Owner Information</h3>");
+                    vehicleTable.append("<table border='1' style='border-collapse:collapse; width:100%;'>");
+                    vehicleTable.append("<tr><th>Name</th><th>National ID</th><th>Gender</th><th>DOB</th><th>Blood Type</th><th>Address</th><th>Phone</th><th>Email</th><th>Emergency Contact</th><th>Criminal Status</th></tr>");
+                    vehicleTable.append("<tr>")
+                        .append("<td>").append(ownerName).append("</td>")
+                        .append("<td>").append(ownerNationalId).append("</td>")
+                        .append("<td>").append(owner != null ? owner.getGender() : "").append("</td>")
+                        .append("<td>").append(owner != null ? owner.getDateOfBirth() : "").append("</td>")
+                        .append("<td>").append(owner != null ? owner.getBloodType() : "").append("</td>")
+                        .append("<td>").append(owner != null ? owner.getAddress() : "").append("</td>")
+                        .append("<td>").append(owner != null ? owner.getPhoneNumber() : "").append("</td>")
+                        .append("<td>").append(owner != null ? owner.getEmail() : "").append("</td>")
+                        .append("<td>").append(owner != null ? owner.getEmergencyContact() : "").append("</td>")
+                        .append("</tr>");
+                    vehicleTable.append("</table></body></html>");
+
+                    javax.swing.JLabel resultLabel = new javax.swing.JLabel(vehicleTable.toString());
+                    resultLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+                    javax.swing.JOptionPane.showMessageDialog(this, resultLabel, "Vehicle & Owner Info", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                }
             } else {
                 showStyledMessageDialog("No vehicles found with that QR code.", "Search Results", javax.swing.JOptionPane.WARNING_MESSAGE);
             }
@@ -559,24 +644,77 @@ javax.swing.JOptionPane.showMessageDialog(this, resultLabel, "Search Results", j
             Person person = policeDAO.findPersonByQRCode(qrCode);
             if (person != null) {
                 List<Report> reports = policeDAO.getReportsByPersonId(person.getPersonId());
+
                 StringBuilder resultBuilder = new StringBuilder("<html><body style='font-family:Segoe UI; font-size:14px;'>");
                 resultBuilder.append("<h3>Person Details:</h3>")
-                             .append("<p>Name: ").append(person.getFirstName()).append(" ").append(person.getLastName()).append("</p>")
-                             .append("<p>National ID: ").append(person.getNationalId()).append("</p>")
-                             .append("<p>Address: ").append(person.getAddress()).append("</p>");
+                             .append("<table border='1' style='border-collapse:collapse; width:100%;'>")
+                             .append("<tr><th>Name</th><th>National ID</th><th>Gender</th><th>DOB</th><th>Blood Type</th><th>Address</th><th>Phone</th><th>Email</th><th>Emergency Contact</th><th>Criminal Status</th></tr>")
+                             .append("<tr>")
+                             .append("<td>").append(person.getName()).append("</td>")
+                             .append("<td>").append(person.getNationalId()).append("</td>")
+                             .append("<td>").append(person.getGender()).append("</td>")
+                             .append("<td>").append(person.getDateOfBirth()).append("</td>")
+                             .append("<td>").append(person.getBloodType()).append("</td>")
+                             .append("<td>").append(person.getAddress()).append("</td>")
+                             .append("<td>").append(person.getPhoneNumber()).append("</td>")
+                             .append("<td>").append(person.getEmail()).append("</td>")
+                             .append("<td>").append(person.getEmergencyContact()).append("</td>")
+                             .append("<td>").append(personDAO.getCriminalStatusById(person.getPersonId())).append("</td>")
+                             .append("</tr></table>");
+
+                // Show driver or police info if available
+                Driver driver = null;
+                Police police = null;
+                try { driver = (Driver) person; } catch (Exception ignored) {}
+                try { police = (Police) person; } catch (Exception ignored) {}
+                if (driver != null) {
+                    resultBuilder.append("<br><h3>Driver License Info</h3>")
+                        .append("<table border='1' style='border-collapse:collapse; width:100%;'>")
+                        .append("<tr><th>License #</th><th>Issue Date</th><th>Expiry</th><th>Type</th><th>Status</th><th>Points</th><th>Restrictions</th><th>Total Violations</th></tr>")
+                        .append("<tr>")
+                        .append("<td>").append(driver.getLicenseNumber()).append("</td>")
+                        .append("<td>").append(driver.getLicenseIssueDate()).append("</td>")
+                        .append("<td>").append(driver.getLicenseExpiryDate()).append("</td>")
+                        .append("<td>").append(driver.getLicenseType()).append("</td>")
+                        .append("<td>").append(driver.getStatus()).append("</td>")
+                        .append("<td>").append(driver.getPoints()).append("</td>")
+                        .append("<td>").append(driver.getRestrictions()).append("</td>")
+                        .append("<td>").append(driver.getTotalViolations()).append("</td>")
+                        .append("</tr></table>");
+                }
+                if (police != null) {
+                    resultBuilder.append("<br><h3>Police Info</h3>")
+                        .append("<table border='1' style='border-collapse:collapse; width:100%;'>")
+                        .append("<tr><th>Badge #</th><th>Rank</th><th>Department</th><th>Username</th><th>Status</th><th>Specialization</th><th>Rank Level</th></tr>")
+                        .append("<tr>")
+                        .append("<td>").append(police.getBadgeNumber()).append("</td>")
+                        .append("<td>").append(police.getRank()).append("</td>")
+                        .append("<td>").append(police.getDepartment()).append("</td>")
+                        .append("<td>").append(police.getUsername()).append("</td>")
+                        .append("<td>").append(police.getStatus()).append("</td>")
+                        .append("<td>").append(police.getSpecialization()).append("</td>")
+                        .append("<td>").append(police.getRankLevel()).append("</td>")
+                        .append("</tr></table>");
+                }
+
                 resultBuilder.append("<h3>Associated Reports:</h3>")
                              .append("<table border='1' style='border-collapse:collapse; width:100%;'>")
-                             .append("<tr><th>Report ID</th><th>Violation Type</th><th>Status</th></tr>");
+                             .append("<tr><th>Report ID</th><th>Violation Type</th><th>Status</th><th>Date</th><th>Fine</th><th>Points Deducted</th><th>Paid?</th></tr>");
+
                 for (Report report : reports) {
-                    String reportColor = report.getStatus().equalsIgnoreCase("No Reports") ? "green" : "red";
-                    String paymentStatus = report.isPaid() ? "Paid" : "Pending";
                     resultBuilder.append("<tr>")
-                                 .append("<td>").append(report.getReportId()).append("</td>")
-                                 .append("<td>").append(report.getViolationType()).append("</td>")
-                                 .append("<td style='color:").append(reportColor).append(";'>").append(report.getStatus()).append(" (" + paymentStatus + ")").append("</td>")
-                                 .append("</tr>");
+                        .append("<td>").append(report.getReportId()).append("</td>")
+                        .append("<td>").append(report.getViolationType()).append("</td>")
+                        .append("<td>").append(report.getStatus()).append("</td>")
+                        .append("<td>").append(report.getReportDate()).append("</td>")
+                        .append("<td>").append(report.getFine()).append("</td>")
+                        .append("<td>").append(report.getPointsDeducted()).append("</td>")
+                        .append("<td>").append(report.isPaid() ? "Yes" : "No").append("</td>")
+                        .append("</tr>");
                 }
+
                 resultBuilder.append("</table></body></html>");
+
                 javax.swing.JLabel resultLabel = new javax.swing.JLabel(resultBuilder.toString());
                 resultLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
                 javax.swing.JOptionPane.showMessageDialog(this, resultLabel, "Search Results", javax.swing.JOptionPane.INFORMATION_MESSAGE);
@@ -690,13 +828,29 @@ javax.swing.JOptionPane.showMessageDialog(this, resultLabel, "Search Results", j
     private void viewMyReports() {
         try {
             int policeId = (currentUser != null) ? currentUser.getPersonId() : 1;
-            List<Report> reports = policeDAO.getReportsByPoliceId(policeId); 
+            List<Report> reports = policeDAO.getReportsByPoliceId(policeId);
             if (reports != null && !reports.isEmpty()) {
-                StringBuilder result = new StringBuilder("Your Reports:\n\n");
+                StringBuilder html = new StringBuilder("<html><body style='font-family:Segoe UI; font-size:14px;'>");
+                html.append("<h3>Your Reports:</h3>");
+                html.append("<table border='1' style='border-collapse:collapse; width:100%;'>");
+                html.append("<tr><th>Report ID</th><th>Driver ID</th><th>Vehicle ID</th><th>Violation Type</th><th>Status</th><th>Fine</th><th>Points Deducted</th><th>Report Date</th></tr>");
                 for (Report report : reports) {
-                    result.append(report.toString()).append("\n\n");
+                    String statusColor = report.getStatus().equalsIgnoreCase("Pending") ? "orange" : "green";
+                    html.append("<tr>")
+                        .append("<td>").append(report.getReportId()).append("</td>")
+                        .append("<td>").append(report.getDriverId()).append("</td>")
+                        .append("<td>").append(report.getVehicleId()).append("</td>")
+                        .append("<td>").append(report.getViolationType()).append("</td>")
+                        .append("<td style='color:").append(statusColor).append(";'>").append(report.getStatus()).append("</td>")
+                        .append("<td>").append(report.getFine()).append("</td>")
+                        .append("<td>").append(report.getPointsDeducted()).append("</td>")
+                        .append("<td>").append(report.getReportDate()).append("</td>")
+                        .append("</tr>");
                 }
-                javax.swing.JOptionPane.showMessageDialog(this, result.toString(), "My Reports", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                html.append("</table></body></html>");
+                javax.swing.JLabel resultLabel = new javax.swing.JLabel(html.toString());
+                resultLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+                javax.swing.JOptionPane.showMessageDialog(this, resultLabel, "My Reports", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             } else {
                 javax.swing.JOptionPane.showMessageDialog(this, "No reports found.", "My Reports", javax.swing.JOptionPane.WARNING_MESSAGE);
             }
@@ -825,13 +979,61 @@ javax.swing.JOptionPane.showMessageDialog(this, resultLabel, "Search Results", j
         JOptionPane.showMessageDialog(this, panel, "Pay Report Fees", JOptionPane.PLAIN_MESSAGE);
     }
 
-  
-
     private void logout() {
         // Implementation for logout
         javax.swing.JOptionPane.showMessageDialog(this, "Logging out...");
         this.dispose();
         new GUIAPP().setVisible(true);
+    }
+
+    private void showChangePasswordDialog() {
+        if (currentUser == null) {
+            showStyledMessageDialog("No user is currently logged in.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
+        panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        javax.swing.JPasswordField oldPasswordField = new javax.swing.JPasswordField();
+        javax.swing.JPasswordField newPasswordField = new javax.swing.JPasswordField();
+        javax.swing.JPasswordField confirmPasswordField = new javax.swing.JPasswordField();
+
+        panel.add(new JLabel("Current Password:"));
+        panel.add(oldPasswordField);
+        panel.add(new JLabel("New Password:"));
+        panel.add(newPasswordField);
+        panel.add(new JLabel("Confirm New Password:"));
+        panel.add(confirmPasswordField);
+
+        int result = showStyledConfirmDialog(panel, "Change Password");
+        if (result == JOptionPane.OK_OPTION) {
+            String oldPass = new String(oldPasswordField.getPassword());
+            String newPass = new String(newPasswordField.getPassword());
+            String confirmPass = new String(confirmPasswordField.getPassword());
+
+            if (oldPass.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty()) {
+                showStyledMessageDialog("All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            Police authUser = policeDAO.authenticate(currentUser.getUsername(), oldPass);
+            if (authUser == null || authUser.getPersonId() != currentUser.getPersonId()) {
+                showStyledMessageDialog("Current password is incorrect.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (!newPass.equals(confirmPass)) {
+                showStyledMessageDialog("New passwords do not match.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (newPass.length() < 6) {
+                showStyledMessageDialog("New password must be at least 6 characters.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            boolean changed = policeDAO.changePassword(currentUser.getPersonId(), newPass);
+            if (changed) {
+                showStyledMessageDialog("Password changed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                showStyledMessageDialog("Failed to change password.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     /**

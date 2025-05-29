@@ -5,13 +5,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// Yo, this is the BusDAO, deals with bus stuff in the DB
 public class BusDAO extends VehicleDAO {
-    
+
     public BusDAO() {
         super();
     }
-    
+
     public Bus findById(int busId) {
         String query = "SELECT v.*, b.* FROM vehicles v " +
                       "JOIN buses b ON v.vehicle_id = b.vehicle_id " +
@@ -19,7 +18,6 @@ public class BusDAO extends VehicleDAO {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, busId);
             ResultSet rs = stmt.executeQuery();
-            
             if (rs.next()) {
                 return extractBusFromResultSet(rs);
             }
@@ -28,7 +26,7 @@ public class BusDAO extends VehicleDAO {
         }
         return null;
     }
-    
+
     public List<Bus> findByBusType(String busType) {
         List<Bus> buses = new ArrayList<>();
         String query = "SELECT v.*, b.* FROM vehicles v " +
@@ -37,7 +35,6 @@ public class BusDAO extends VehicleDAO {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, busType);
             ResultSet rs = stmt.executeQuery();
-            
             while (rs.next()) {
                 buses.add(extractBusFromResultSet(rs));
             }
@@ -47,23 +44,18 @@ public class BusDAO extends VehicleDAO {
         return buses;
     }
 
-
     public boolean insert(Bus bus) {
         String vehicleQuery = "INSERT INTO vehicles (plate_number, registration_number, type, " +
                             "make, model, year, color, fuel_type, engine_number, chassis_number, " +
                             "seats, vehicle_status, registration_date, expiry_date, insurance_provider, " +
                             "insurance_expiry, owner_id, current_location, notes) " +
                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
         String busQuery = "INSERT INTO buses (vehicle_id, bus_type, seating_capacity, standing_capacity, " +
                          "is_accessible, assigned_route, route_type, operator_company, inspection_due_date, " +
                          "has_cctv, ticketing_system_type, air_conditioned) " +
                          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
         try {
             connection.setAutoCommit(false);
-            
-            // Insert into vehicles table
             try (PreparedStatement stmt = connection.prepareStatement(vehicleQuery, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setString(1, bus.getPlateNumber());
                 stmt.setString(2, bus.getRegistrationNumber());
@@ -84,17 +76,13 @@ public class BusDAO extends VehicleDAO {
                 stmt.setInt(17, bus.getOwnerId());
                 stmt.setString(18, bus.getCurrentLocation());
                 stmt.setString(19, bus.getNotes());
-                
                 int affectedRows = stmt.executeUpdate();
                 if (affectedRows == 0) {
                     throw new SQLException("Creating vehicle failed, no rows affected.");
                 }
-                
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int vehicleId = generatedKeys.getInt(1);
-                        
-                        // Insert into buses table
                         try (PreparedStatement busStmt = connection.prepareStatement(busQuery)) {
                             busStmt.setInt(1, vehicleId);
                             busStmt.setString(2, bus.getBusType());
@@ -108,7 +96,6 @@ public class BusDAO extends VehicleDAO {
                             busStmt.setBoolean(10, bus.isHasCCTV());
                             busStmt.setString(11, bus.getTicketingSystemType());
                             busStmt.setBoolean(12, bus.isAirConditioned());
-                            
                             busStmt.executeUpdate();
                         }
                     } else {
@@ -116,42 +103,29 @@ public class BusDAO extends VehicleDAO {
                     }
                 }
             }
-            
             connection.commit();
             return true;
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                System.out.println("Error rolling back transaction: " + ex.getMessage());
-            }
+            try { connection.rollback(); } catch (SQLException ex) { System.out.println("Error rolling back transaction: " + ex.getMessage()); }
             System.out.println("Error inserting bus: " + e.getMessage());
             return false;
         } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                System.out.println("Error resetting auto-commit: " + e.getMessage());
-            }
+            try { connection.setAutoCommit(true); } catch (SQLException e) { System.out.println("Error resetting auto-commit: " + e.getMessage()); }
         }
     }
-    
+
     public boolean update(Bus bus) {
         String vehicleQuery = "UPDATE vehicles SET plate_number=?, registration_number=?, type=?, " +
                             "make=?, model=?, year=?, color=?, fuel_type=?, engine_number=?, " +
                             "chassis_number=?, seats=?, vehicle_status=?, registration_date=?, " +
                             "expiry_date=?, insurance_provider=?, insurance_expiry=?, owner_id=?, " +
                             "current_location=?, notes=? WHERE vehicle_id=?";
-        
         String busQuery = "UPDATE buses SET bus_type=?, seating_capacity=?, standing_capacity=?, " +
                          "is_accessible=?, assigned_route=?, route_type=?, operator_company=?, " +
                          "inspection_due_date=?, has_cctv=?, ticketing_system_type=?, air_conditioned=? " +
                          "WHERE vehicle_id=?";
-        
         try {
             connection.setAutoCommit(false);
-            
-            // Update vehicles table
             try (PreparedStatement stmt = connection.prepareStatement(vehicleQuery)) {
                 stmt.setString(1, bus.getPlateNumber());
                 stmt.setString(2, bus.getRegistrationNumber());
@@ -173,11 +147,8 @@ public class BusDAO extends VehicleDAO {
                 stmt.setString(18, bus.getCurrentLocation());
                 stmt.setString(19, bus.getNotes());
                 stmt.setInt(20, bus.getVehicleId());
-                
                 stmt.executeUpdate();
             }
-            
-            // Update buses table
             try (PreparedStatement stmt = connection.prepareStatement(busQuery)) {
                 stmt.setString(1, bus.getBusType());
                 stmt.setInt(2, bus.getSeatingCapacity());
@@ -191,29 +162,19 @@ public class BusDAO extends VehicleDAO {
                 stmt.setString(10, bus.getTicketingSystemType());
                 stmt.setBoolean(11, bus.isAirConditioned());
                 stmt.setInt(12, bus.getVehicleId());
-                
                 stmt.executeUpdate();
             }
-            
             connection.commit();
             return true;
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                System.out.println("Error rolling back transaction: " + ex.getMessage());
-            }
+            try { connection.rollback(); } catch (SQLException ex) { System.out.println("Error rolling back transaction: " + ex.getMessage()); }
             System.out.println("Error updating bus: " + e.getMessage());
             return false;
         } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                System.out.println("Error resetting auto-commit: " + e.getMessage());
-            }
+            try { connection.setAutoCommit(true); } catch (SQLException e) { System.out.println("Error resetting auto-commit: " + e.getMessage()); }
         }
     }
-    
+
     public boolean delete(int busId) {
         String query = "DELETE FROM vehicles WHERE vehicle_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -224,7 +185,7 @@ public class BusDAO extends VehicleDAO {
             return false;
         }
     }
-    
+
     private Bus extractBusFromResultSet(ResultSet rs) throws SQLException {
         Bus bus = new Bus(
             rs.getInt("vehicle_id"),

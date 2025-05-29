@@ -3,15 +3,12 @@ package dao;
 import com.AavengersTrafficControle.trafficsystem.model.Car;
 import java.sql.*;
 
-
-
-// Yo, this is the CarDAO, deals with car stuff in the DB
 public class CarDAO extends VehicleDAO {
-    
+
     public CarDAO() {
         super();
     }
-    
+
     public Car findById(int carId) {
         String query = "SELECT v.*, c.* FROM vehicles v " +
                       "JOIN cars c ON v.vehicle_id = c.vehicle_id " +
@@ -19,7 +16,6 @@ public class CarDAO extends VehicleDAO {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, carId);
             ResultSet rs = stmt.executeQuery();
-            
             if (rs.next()) {
                 return extractCarFromResultSet(rs);
             }
@@ -28,9 +24,6 @@ public class CarDAO extends VehicleDAO {
         }
         return null;
     }
-    
-
-    
 
     public boolean insert(Car car) {
         String vehicleQuery = "INSERT INTO vehicles (plate_number, registration_number, type, " +
@@ -38,15 +31,11 @@ public class CarDAO extends VehicleDAO {
                             "seats, vehicle_status, registration_date, expiry_date, insurance_provider, " +
                             "insurance_expiry, owner_id, current_location, notes) " +
                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
         String carQuery = "INSERT INTO cars (vehicle_id, number_of_doors, body_style, transmission, " +
                          "drive_type, trunk_capacity_liters, sunroof, infotainment_system, airbags, is_luxury) " +
                          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
         try {
             connection.setAutoCommit(false);
-            
-            // Insert into vehicles table
             try (PreparedStatement stmt = connection.prepareStatement(vehicleQuery, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setString(1, car.getPlateNumber());
                 stmt.setString(2, car.getRegistrationNumber());
@@ -67,17 +56,13 @@ public class CarDAO extends VehicleDAO {
                 stmt.setInt(17, car.getOwnerId());
                 stmt.setString(18, car.getCurrentLocation());
                 stmt.setString(19, car.getNotes());
-                
                 int affectedRows = stmt.executeUpdate();
                 if (affectedRows == 0) {
                     throw new SQLException("Creating vehicle failed, no rows affected.");
                 }
-                
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int vehicleId = generatedKeys.getInt(1);
-                        
-                        // Insert into cars table
                         try (PreparedStatement carStmt = connection.prepareStatement(carQuery)) {
                             carStmt.setInt(1, vehicleId);
                             carStmt.setInt(2, car.getNumberOfDoors());
@@ -89,7 +74,6 @@ public class CarDAO extends VehicleDAO {
                             carStmt.setString(8, car.getInfotainmentSystem());
                             carStmt.setInt(9, car.getAirbags());
                             carStmt.setBoolean(10, car.isLuxury());
-                            
                             carStmt.executeUpdate();
                         }
                     } else {
@@ -97,41 +81,28 @@ public class CarDAO extends VehicleDAO {
                     }
                 }
             }
-            
             connection.commit();
             return true;
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                System.out.println("Error rolling back transaction: " + ex.getMessage());
-            }
+            try { connection.rollback(); } catch (SQLException ex) { System.out.println("Error rolling back transaction: " + ex.getMessage()); }
             System.out.println("Error inserting car: " + e.getMessage());
             return false;
         } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                System.out.println("Error resetting auto-commit: " + e.getMessage());
-            }
+            try { connection.setAutoCommit(true); } catch (SQLException e) { System.out.println("Error resetting auto-commit: " + e.getMessage()); }
         }
     }
-    
+
     public boolean update(Car car) {
         String vehicleQuery = "UPDATE vehicles SET plate_number=?, registration_number=?, type=?, " +
                             "make=?, model=?, year=?, color=?, fuel_type=?, engine_number=?, " +
                             "chassis_number=?, seats=?, vehicle_status=?, registration_date=?, " +
                             "expiry_date=?, insurance_provider=?, insurance_expiry=?, owner_id=?, " +
                             "current_location=?, notes=? WHERE vehicle_id=?";
-        
         String carQuery = "UPDATE cars SET number_of_doors=?, body_style=?, transmission=?, " +
                          "drive_type=?, trunk_capacity_liters=?, sunroof=?, infotainment_system=?, " +
                          "airbags=?, is_luxury=? WHERE vehicle_id=?";
-        
         try {
             connection.setAutoCommit(false);
-            
-            // Update vehicles table
             try (PreparedStatement stmt = connection.prepareStatement(vehicleQuery)) {
                 stmt.setString(1, car.getPlateNumber());
                 stmt.setString(2, car.getRegistrationNumber());
@@ -153,11 +124,8 @@ public class CarDAO extends VehicleDAO {
                 stmt.setString(18, car.getCurrentLocation());
                 stmt.setString(19, car.getNotes());
                 stmt.setInt(20, car.getVehicleId());
-                
                 stmt.executeUpdate();
             }
-            
-            // Update cars table
             try (PreparedStatement stmt = connection.prepareStatement(carQuery)) {
                 stmt.setInt(1, car.getNumberOfDoors());
                 stmt.setString(2, car.getBodyStyle());
@@ -169,29 +137,19 @@ public class CarDAO extends VehicleDAO {
                 stmt.setInt(8, car.getAirbags());
                 stmt.setBoolean(9, car.isLuxury());
                 stmt.setInt(10, car.getVehicleId());
-                
                 stmt.executeUpdate();
             }
-            
             connection.commit();
             return true;
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                System.out.println("Error rolling back transaction: " + ex.getMessage());
-            }
+            try { connection.rollback(); } catch (SQLException ex) { System.out.println("Error rolling back transaction: " + ex.getMessage()); }
             System.out.println("Error updating car: " + e.getMessage());
             return false;
         } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                System.out.println("Error resetting auto-commit: " + e.getMessage());
-            }
+            try { connection.setAutoCommit(true); } catch (SQLException e) { System.out.println("Error resetting auto-commit: " + e.getMessage()); }
         }
     }
-    
+
     public boolean delete(int carId) {
         String query = "DELETE FROM vehicles WHERE vehicle_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -202,10 +160,9 @@ public class CarDAO extends VehicleDAO {
             return false;
         }
     }
-    
+
     private Car extractCarFromResultSet(ResultSet rs) throws SQLException {
         Car car = new Car();
-        // Set vehicle properties
         car.setVehicleId(rs.getInt("vehicle_id"));
         car.setPlateNumber(rs.getString("plate_number"));
         car.setRegistrationNumber(rs.getString("registration_number"));
@@ -226,8 +183,6 @@ public class CarDAO extends VehicleDAO {
         car.setOwnerId(rs.getInt("owner_id"));
         car.setCurrentLocation(rs.getString("current_location"));
         car.setNotes(rs.getString("notes"));
-        
-        // Set car-specific properties
         car.setNumberOfDoors(rs.getInt("number_of_doors"));
         car.setBodyStyle(rs.getString("body_style"));
         car.setTransmission(rs.getString("transmission"));
@@ -237,7 +192,6 @@ public class CarDAO extends VehicleDAO {
         car.setInfotainmentSystem(rs.getString("infotainment_system"));
         car.setAirbags(rs.getInt("airbags"));
         car.setLuxury(rs.getBoolean("is_luxury"));
-        
         return car;
     }
 }

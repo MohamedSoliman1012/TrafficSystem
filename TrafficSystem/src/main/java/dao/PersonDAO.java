@@ -5,7 +5,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// Handles all the person DB stuff, ya know
 public class PersonDAO {
     private Connection connection;
 
@@ -121,13 +120,11 @@ public class PersonDAO {
         return people;
     }
 
-    // Get criminal status for a person
     public String getCriminalStatusById(int personId) {
         String sql = "SELECT criminal_status FROM persons WHERE person_id = ?";
-        try (java.sql.Connection conn = DatabaseConnection.getConnection();
-             java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, personId);
-            java.sql.ResultSet rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getString("criminal_status");
             }
