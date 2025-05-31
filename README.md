@@ -4,6 +4,26 @@ A professional, modern Java Swing-based Traffic System for managing vehicles, pe
 
 ---
 
+## Sample Police Login Accounts
+
+Below are sample login credentials for each police rank (preloaded in the database):
+
+| Rank        | Username      | Password      | Description         |
+|-------------|--------------|--------------|---------------------|
+| Chief       | AhmedSaleh    | 12345678     | Admin (Rank 1)      |
+| Captain     | Peter         | 12345678     | Rank 2              |
+| Lieutenant  | Parker        | 12345678     | Rank 3              |
+| Officer     | Tom           | 12345678     | Rank 4              |
+| Officer     | Tony          | 12345678     | Rank 4              |
+| Sergeant    | SophiaW       | password12   | Rank 3              |
+| Officer     | MichaelJ      | password13   | Rank 4              |
+| Sergeant    | emilyb        | securepass123| Rank 3              |
+| Lieutenant  | tomh          | pass456      | Rank 2              |
+
+> Use these accounts to log in and test the system with different permissions.
+
+---
+
 ## Screenshots
 
 Below are screenshots of the main features of the Traffic System application:
